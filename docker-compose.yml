@@ -1,0 +1,53 @@
+services:
+  # PostgreSQL
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: payload
+      POSTGRES_PASSWORD: payload
+      POSTGRES_DB: tc_vympel
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U payload -d tc_vympel"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # Next.js + Payload CMS
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DATABASE_URI: postgresql://payload:payload@db:5432/tc_vympel
+      PAYLOAD_SECRET: ${PAYLOAD_SECRET:-change-this-secret-in-production-min-32-chars}
+      NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost}
+      NODE_ENV: production
+    volumes:
+      - media_data:/app/media
+    expose:
+      - "3000"
+
+  # Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - media_data:/app/media:ro
+
+volumes:
+  postgres_data:
+  media_data:
