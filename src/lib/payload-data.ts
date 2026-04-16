@@ -1,8 +1,20 @@
-import { getPayload } from 'payload'
-import config from '@payload-config'
+import type { Payload } from 'payload'
 
-async function getPayloadClient() {
-  return getPayload({ config })
+let cachedClient: Payload | null = null
+let initFailed = false
+
+async function getPayloadClient(): Promise<Payload | null> {
+  if (initFailed) return null
+  if (cachedClient) return cachedClient
+  try {
+    const { getPayload } = await import('payload')
+    const { default: config } = await import('@payload-config')
+    cachedClient = await getPayload({ config })
+    return cachedClient
+  } catch {
+    initFailed = true
+    return null
+  }
 }
 
 // ──────────────────────── HERO ────────────────────────
@@ -23,6 +35,7 @@ const HERO_MOCK = {
 export async function getHeroData() {
   try {
     const payload = await getPayloadClient()
+    if (!payload) return HERO_MOCK
     const data = await payload.findGlobal({ slug: 'hero-section' })
     if (!data?.title) return HERO_MOCK
     return {
@@ -55,6 +68,7 @@ const ABOUT_MOCK = {
 export async function getAboutData() {
   try {
     const payload = await getPayloadClient()
+    if (!payload) return ABOUT_MOCK
     const data = await payload.findGlobal({ slug: 'about-section' })
     if (!data?.title) return ABOUT_MOCK
     return {
@@ -83,6 +97,7 @@ const PRODUCTS_MOCK = [
 export async function getProductsData() {
   try {
     const payload = await getPayloadClient()
+    if (!payload) return PRODUCTS_MOCK
     const { docs } = await payload.find({ collection: 'products', sort: 'order', where: { isActive: { equals: true } }, limit: 20 })
     if (!docs?.length) return PRODUCTS_MOCK
     return docs.map((d: any) => ({ id: String(d.id), title: d.title, description: d.description, image: d.image }))
@@ -105,6 +120,7 @@ const SERVICES_MOCK = [
 export async function getServicesData() {
   try {
     const payload = await getPayloadClient()
+    if (!payload) return SERVICES_MOCK
     const { docs } = await payload.find({ collection: 'services', sort: 'order', limit: 20 })
     if (!docs?.length) return SERVICES_MOCK
     return docs.map((d: any) => ({ id: String(d.id), title: d.title, description: d.description }))
@@ -124,6 +140,7 @@ const PARTNERS_MOCK = [
 export async function getPartnersData() {
   try {
     const payload = await getPayloadClient()
+    if (!payload) return PARTNERS_MOCK.map((name, i) => ({ id: String(i), name }))
     const { docs } = await payload.find({ collection: 'partners', sort: 'order', limit: 50 })
     if (!docs?.length) return PARTNERS_MOCK.map((name, i) => ({ id: String(i), name }))
     return docs.map((d: any) => ({ id: String(d.id), name: d.name, logo: d.logo }))
@@ -144,6 +161,7 @@ const SETTINGS_MOCK = {
 export async function getSiteSettings() {
   try {
     const payload = await getPayloadClient()
+    if (!payload) return SETTINGS_MOCK
     const data = await payload.findGlobal({ slug: 'site-settings' })
     return {
       companyName: data?.companyName || SETTINGS_MOCK.companyName,

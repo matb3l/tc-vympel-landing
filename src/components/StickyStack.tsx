@@ -10,11 +10,11 @@ type Props = {
 }
 
 export function StickyCard({ children, index, total }: Props) {
-  const ref = useRef<HTMLDivElement>(null)
+  const trackRef = useRef<HTMLDivElement>(null)
   const isLast = index === total - 1
 
   const { scrollYProgress } = useScroll({
-    target: ref,
+    target: trackRef,
     offset: ['start start', 'end start'],
   })
 
@@ -31,17 +31,15 @@ export function StickyCard({ children, index, total }: Props) {
   }
 
   return (
-    <div
-      ref={ref}
-      className="sticky top-0 h-screen"
-      style={{ zIndex: index + 1 }}
-    >
-      <motion.div
-        className="h-screen overflow-hidden will-change-transform"
-        style={{ scale, opacity, borderRadius }}
-      >
-        {children}
-      </motion.div>
+    <div ref={trackRef} className="h-screen">
+      <div className="sticky top-0 h-screen" style={{ zIndex: index + 1 }}>
+        <motion.div
+          className="h-screen overflow-hidden will-change-transform"
+          style={{ scale, opacity, borderRadius }}
+        >
+          {children}
+        </motion.div>
+      </div>
     </div>
   )
 }
