@@ -5,7 +5,14 @@ import { Button } from '@/components/ui/button'
 import { Animate, MagneticHover } from '@/components/motion'
 
 type Props = {
-  data: { title: string; subtitle: string; ctaText: string; ctaSecondaryText: string; stats: { value: string; label: string }[] }
+  data: {
+    title: string
+    subtitle: string
+    ctaText: string
+    ctaSecondaryText: string
+    backgroundImage: { url: string; alt: string } | null
+    stats: { value: string; label: string }[]
+  }
   phone: string
 }
 
@@ -13,8 +20,17 @@ export function HeroSection({ data, phone }: Props) {
   return (
     <section className="relative min-h-[100svh] flex items-center gradient-dark overflow-hidden">
       <div className="absolute inset-0">
-        <div className="absolute top-[-20%] right-[-10%] w-[60vw] max-w-[700px] aspect-square rounded-full bg-brand-600/[0.06] blur-[100px]" />
-        <div className="absolute bottom-[-10%] left-[-5%] w-[40vw] max-w-[500px] aspect-square rounded-full bg-brand-900/[0.08] blur-[80px]" />
+        {data.backgroundImage ? (
+          <>
+            <img src={data.backgroundImage.url} alt={data.backgroundImage.alt} className="absolute inset-0 w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0f172a]/90 via-[#0f172a]/70 to-[#0f172a]/40" />
+          </>
+        ) : (
+          <>
+            <div className="absolute top-[-20%] right-[-10%] w-[60vw] max-w-[700px] aspect-square rounded-full bg-brand-600/[0.06] blur-[100px]" />
+            <div className="absolute bottom-[-10%] left-[-5%] w-[40vw] max-w-[500px] aspect-square rounded-full bg-brand-900/[0.08] blur-[80px]" />
+          </>
+        )}
       </div>
 
       <div className="relative z-10 container-fluid w-full" style={{ paddingTop: 'clamp(7rem, 15vw, 10rem)', paddingBottom: 'clamp(3rem, 8vw, 5rem)' }}>

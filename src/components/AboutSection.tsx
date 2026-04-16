@@ -10,6 +10,7 @@ type Props = {
   data: {
     title: string
     description: string
+    image: { url: string; alt: string } | null
     advantages: { title: string; description: string; icon: string }[]
   }
 }
@@ -44,13 +45,17 @@ export function AboutSection({ data }: Props) {
           <div>
             <Animate delay={0.1}>
               <div className="relative overflow-hidden aspect-[4/3] bg-gradient-to-br from-dark-100 to-dark-200" style={{ borderRadius: 'clamp(0.75rem, 2vw, 1.25rem)', marginBottom: 'clamp(0.75rem, 2vw, 1.25rem)' }}>
-                <div className="absolute inset-0 flex items-center justify-center text-dark-400">
-                  <div className="text-center p-6">
-                    <Award className="w-12 h-12 mx-auto mb-3 text-dark-300" />
-                    <p className="font-semibold text-dark-500">Фото компании</p>
-                    <p className="text-fluid-sm text-dark-400 mt-1">Замените через CMS</p>
+                {data.image ? (
+                  <img src={data.image.url} alt={data.image.alt} className="absolute inset-0 w-full h-full object-cover" />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center text-dark-400">
+                    <div className="text-center p-6">
+                      <Award className="w-12 h-12 mx-auto mb-3 text-dark-300" />
+                      <p className="font-semibold text-dark-500">Фото компании</p>
+                      <p className="text-fluid-sm text-dark-400 mt-1">Замените через CMS</p>
+                    </div>
                   </div>
-                </div>
+                )}
                 <div className="absolute bottom-4 left-4 px-5 py-3 bg-white/90 backdrop-blur-lg shadow-lg" style={{ borderRadius: 'clamp(0.5rem, 1vw, 0.75rem)' }}>
                   <div className="text-2xl font-black text-dark-900">1995</div>
                   <div className="text-xs text-dark-500 font-medium">год основания</div>

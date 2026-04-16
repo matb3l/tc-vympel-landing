@@ -6,13 +6,15 @@
 
 @layer base {
   html {
-    scroll-behavior: auto;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   body {
     overflow-x: hidden;
     color: #0f172a;
+    background: #020617;
   }
 }
 

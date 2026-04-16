@@ -10,7 +10,7 @@ const GRADIENTS = [
 ]
 const ACCENTS = ['bg-amber-500', 'bg-blue-500', 'bg-red-500', 'bg-emerald-500', 'bg-violet-500', 'bg-slate-500']
 
-type Product = { id: string; title: string; description: string; image?: any }
+type Product = { id: string; title: string; description: string; image: { url: string; alt: string } | null }
 type Props = { data: Product[] }
 
 export function ProductsSection({ data }: Props) {
@@ -34,9 +34,13 @@ export function ProductsSection({ data }: Props) {
             <StaggerItem key={product.id}>
               <div className="group bg-white overflow-hidden border border-dark-200/60 hover:border-dark-300 hover:shadow-xl hover:shadow-dark-900/[0.05] transition-all duration-500 h-full flex flex-col" style={{ borderRadius: 'clamp(0.75rem, 2vw, 1.25rem)' }}>
                 <div className={`relative bg-gradient-to-br ${GRADIENTS[i % GRADIENTS.length]}`} style={{ height: 'clamp(7rem, 12vw, 10rem)' }}>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <p className="text-xs font-medium text-dark-400">Фото товара</p>
-                  </div>
+                  {product.image ? (
+                    <img src={product.image.url} alt={product.image.alt} className="absolute inset-0 w-full h-full object-cover" />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <p className="text-xs font-medium text-dark-400">Фото товара</p>
+                    </div>
+                  )}
                   <div className={`absolute top-3 left-3 w-2.5 h-2.5 rounded-full ${ACCENTS[i % ACCENTS.length]}`} />
                 </div>
                 <div className="flex-1 flex flex-col" style={{ padding: 'clamp(1rem, 2vw, 1.25rem)' }}>

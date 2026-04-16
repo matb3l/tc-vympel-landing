@@ -99,11 +99,15 @@ export interface Config {
     'site-settings': SiteSetting;
     'hero-section': HeroSection;
     'about-section': AboutSection;
+    'geography-section': GeographySection;
+    'cta-section': CtaSection;
   };
   globalsSelect: {
     'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
     'hero-section': HeroSectionSelect<false> | HeroSectionSelect<true>;
     'about-section': AboutSectionSelect<false> | AboutSectionSelect<true>;
+    'geography-section': GeographySectionSelect<false> | GeographySectionSelect<true>;
+    'cta-section': CtaSectionSelect<false> | CtaSectionSelect<true>;
   };
   locale: null;
   widgets: {
@@ -257,6 +261,8 @@ export interface Service {
   createdAt: string;
 }
 /**
+ * Скачать все заявки: откройте /api/contact-submissions/export-csv в браузере (нужна авторизация)
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "contact-submissions".
  */
@@ -610,6 +616,45 @@ export interface AboutSection {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "geography-section".
+ */
+export interface GeographySection {
+  id: number;
+  title?: string | null;
+  subtitle?: string | null;
+  stats?:
+    | {
+        value: number;
+        suffix?: string | null;
+        label: string;
+        icon?: ('map-pin' | 'building' | 'truck' | 'globe') | null;
+        primary?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cta-section".
+ */
+export interface CtaSection {
+  id: number;
+  title?: string | null;
+  subtitle?: string | null;
+  ctaText?: string | null;
+  benefits?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "site-settings_select".
  */
 export interface SiteSettingsSelect<T extends boolean = true> {
@@ -673,6 +718,45 @@ export interface AboutSectionSelect<T extends boolean = true> {
         title?: T;
         description?: T;
         icon?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "geography-section_select".
+ */
+export interface GeographySectionSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  stats?:
+    | T
+    | {
+        value?: T;
+        suffix?: T;
+        label?: T;
+        icon?: T;
+        primary?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "cta-section_select".
+ */
+export interface CtaSectionSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  ctaText?: T;
+  benefits?:
+    | T
+    | {
+        text?: T;
         id?: T;
       };
   updatedAt?: T;

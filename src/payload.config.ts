@@ -14,6 +14,8 @@ import { ContactSubmissions } from './collections/ContactSubmissions'
 import { SiteSettings } from './globals/SiteSettings'
 import { HeroSection } from './globals/HeroSection'
 import { AboutSection } from './globals/AboutSection'
+import { GeographySection } from './globals/GeographySection'
+import { CTASection } from './globals/CTASection'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -42,7 +44,7 @@ export default buildConfig({
     Services,
     ContactSubmissions,
   ],
-  globals: [SiteSettings, HeroSection, AboutSection],
+  globals: [SiteSettings, HeroSection, AboutSection, GeographySection, CTASection],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || 'default-secret-change-me',
   typescript: {

@@ -16,6 +16,8 @@ import {
   getProductsData,
   getServicesData,
   getPartnersData,
+  getGeographyData,
+  getCTAData,
   getSiteSettings,
 } from '@/lib/payload-data'
 
@@ -35,12 +37,14 @@ const jsonLd = {
 const TOTAL_SECTIONS = 8
 
 export default async function HomePage() {
-  const [hero, about, products, services, partners, settings] = await Promise.all([
+  const [hero, about, products, services, partners, geography, cta, settings] = await Promise.all([
     getHeroData(),
     getAboutData(),
     getProductsData(),
     getServicesData(),
     getPartnersData(),
+    getGeographyData(),
+    getCTAData(),
     getSiteSettings(),
   ])
 
@@ -69,11 +73,11 @@ export default async function HomePage() {
       </StickyCard>
 
       <StickyCard index={5} total={TOTAL_SECTIONS}>
-        <GeographySection />
+        <GeographySection data={geography} />
       </StickyCard>
 
       <StickyCard index={6} total={TOTAL_SECTIONS}>
-        <CTASection />
+        <CTASection data={cta} />
       </StickyCard>
 
       <StickyCard index={7} total={TOTAL_SECTIONS}>

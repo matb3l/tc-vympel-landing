@@ -11,7 +11,7 @@ const NAV = [
 
 export function Footer() {
   return (
-    <footer className="relative z-10 gradient-dark" style={{ paddingTop: 'clamp(2.5rem, 6vw, 4rem)', paddingBottom: 'clamp(1.5rem, 3vw, 2rem)' }}>
+    <footer className="relative z-10 gradient-dark" style={{ paddingTop: 'clamp(2.5rem, 6vw, 4rem)', paddingBottom: 'clamp(1.5rem, 3vw, 2rem)', scrollSnapAlign: 'end' as const }}>
       <div className="container-fluid">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-fluid-lg" style={{ paddingBottom: 'clamp(1.5rem, 4vw, 2.5rem)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
           <div className="sm:col-span-2">
