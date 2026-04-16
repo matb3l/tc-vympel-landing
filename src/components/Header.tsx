@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { Phone, Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -24,6 +24,7 @@ export function Header() {
   const textColor = useTransform(scrollY, [0, 60], ['rgba(255,255,255,1)', 'rgba(15,23,42,1)'])
   const textSubColor = useTransform(scrollY, [0, 60], ['rgba(255,255,255,0.5)', 'rgba(148,163,184,1)'])
   const navColor = useTransform(scrollY, [0, 60], ['rgba(255,255,255,0.7)', 'rgba(100,116,139,1)'])
+  const borderBottom = useTransform(borderOpacity, (v) => `1px solid rgba(15,23,42,${v})`)
 
   return (
     <motion.header
@@ -35,7 +36,7 @@ export function Header() {
         backdropFilter: blur,
         WebkitBackdropFilter: blur,
         boxShadow: shadow,
-        borderBottom: useTransform(borderOpacity, (v) => `1px solid rgba(15,23,42,${v})`),
+        borderBottom,
       }}
       className="fixed top-0 left-0 right-0 z-50"
     >

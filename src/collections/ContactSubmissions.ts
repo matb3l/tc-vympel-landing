@@ -8,7 +8,7 @@ export const ContactSubmissions: CollectionConfig = {
     defaultColumns: ['name', 'phone', 'company', 'createdAt'],
   },
   access: {
-    read: () => true,
+    read: ({ req }) => Boolean(req.user),
     create: () => true,
   },
   fields: [

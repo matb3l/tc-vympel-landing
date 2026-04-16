@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap");
 
 @layer base {
   html {
@@ -33,20 +33,43 @@
   }
 
   /* Fluid typography */
-  .text-fluid-hero { font-size: clamp(2.25rem, 6vw, 4.5rem); line-height: 1.08; }
-  .text-fluid-h2   { font-size: clamp(1.75rem, 4vw, 3rem);   line-height: 1.12; }
-  .text-fluid-h3   { font-size: clamp(1rem, 1.4vw, 1.25rem);  line-height: 1.4; }
-  .text-fluid-body  { font-size: clamp(0.9375rem, 1.1vw, 1.125rem); line-height: 1.7; }
-  .text-fluid-sm    { font-size: clamp(0.8125rem, 0.95vw, 0.9375rem); line-height: 1.6; }
+  .text-fluid-hero {
+    font-size: clamp(2.25rem, 6vw, 4.5rem);
+    line-height: 1.08;
+  }
+  .text-fluid-h2 {
+    font-size: clamp(1.75rem, 4vw, 3rem);
+    line-height: 1.12;
+  }
+  .text-fluid-h3 {
+    font-size: clamp(1rem, 1.4vw, 1.25rem);
+    line-height: 1.4;
+  }
+  .text-fluid-body {
+    font-size: clamp(0.9375rem, 1.1vw, 1.125rem);
+    line-height: 1.7;
+  }
+  .text-fluid-sm {
+    font-size: clamp(0.8125rem, 0.95vw, 0.9375rem);
+    line-height: 1.6;
+  }
 
   /* Fluid gap */
-  .gap-fluid     { gap: clamp(0.75rem, 2vw, 1.5rem); }
-  .gap-fluid-lg  { gap: clamp(1.5rem, 4vw, 3rem); }
+  .gap-fluid {
+    gap: clamp(0.75rem, 2vw, 1.5rem);
+  }
+  .gap-fluid-lg {
+    gap: clamp(1.5rem, 4vw, 3rem);
+  }
 
   /* Gradients */
-  .gradient-brand { background: linear-gradient(135deg, #e11d48 0%, #be123c 50%, #881337 100%); }
-  .gradient-dark  { background: linear-gradient(180deg, #0f172a 0%, #020617 100%); }
-  .text-gradient  {
+  .gradient-brand {
+    background: linear-gradient(135deg, #e11d48 0%, #be123c 50%, #881337 100%);
+  }
+  .gradient-dark {
+    background: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+  }
+  .text-gradient {
     background: linear-gradient(90deg, #e11d48, #f43f5e);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;

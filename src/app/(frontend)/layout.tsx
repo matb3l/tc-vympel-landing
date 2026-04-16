@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import '@/app/globals.css'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 
@@ -33,10 +34,12 @@ export const metadata: Metadata = {
 
 export default function FrontendLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <Header />
-      <main>{children}</main>
-      <Footer />
-    </>
+    <html lang="ru">
+      <body>
+        <Header />
+        <main>{children}</main>
+        <Footer />
+      </body>
+    </html>
   )
 }
