@@ -1,12 +1,9 @@
-let getPayloadClient: (() => Promise<any>) | null = null
+import { getPayload } from 'payload'
+import config from '@payload-config'
 
-try {
-  if (process.env.DATABASE_URI) {
-    const { getPayload } = require('payload')
-    const config = require('@payload-config').default
-    getPayloadClient = () => getPayload({ config })
-  }
-} catch {}
+async function getPayloadClient() {
+  return getPayload({ config })
+}
 
 // ──────────────────────── HERO ────────────────────────
 
@@ -25,7 +22,6 @@ const HERO_MOCK = {
 
 export async function getHeroData() {
   try {
-    if (!getPayloadClient) return HERO_MOCK
     const payload = await getPayloadClient()
     const data = await payload.findGlobal({ slug: 'hero-section' })
     if (!data?.title) return HERO_MOCK
@@ -58,7 +54,6 @@ const ABOUT_MOCK = {
 
 export async function getAboutData() {
   try {
-    if (!getPayloadClient) return ABOUT_MOCK
     const payload = await getPayloadClient()
     const data = await payload.findGlobal({ slug: 'about-section' })
     if (!data?.title) return ABOUT_MOCK
@@ -87,7 +82,6 @@ const PRODUCTS_MOCK = [
 
 export async function getProductsData() {
   try {
-    if (!getPayloadClient) return PRODUCTS_MOCK
     const payload = await getPayloadClient()
     const { docs } = await payload.find({ collection: 'products', sort: 'order', where: { isActive: { equals: true } }, limit: 20 })
     if (!docs?.length) return PRODUCTS_MOCK
@@ -110,7 +104,6 @@ const SERVICES_MOCK = [
 
 export async function getServicesData() {
   try {
-    if (!getPayloadClient) return SERVICES_MOCK
     const payload = await getPayloadClient()
     const { docs } = await payload.find({ collection: 'services', sort: 'order', limit: 20 })
     if (!docs?.length) return SERVICES_MOCK
@@ -130,7 +123,6 @@ const PARTNERS_MOCK = [
 
 export async function getPartnersData() {
   try {
-    if (!getPayloadClient) return PARTNERS_MOCK.map((name, i) => ({ id: String(i), name }))
     const payload = await getPayloadClient()
     const { docs } = await payload.find({ collection: 'partners', sort: 'order', limit: 50 })
     if (!docs?.length) return PARTNERS_MOCK.map((name, i) => ({ id: String(i), name }))
@@ -151,7 +143,6 @@ const SETTINGS_MOCK = {
 
 export async function getSiteSettings() {
   try {
-    if (!getPayloadClient) return SETTINGS_MOCK
     const payload = await getPayloadClient()
     const data = await payload.findGlobal({ slug: 'site-settings' })
     return {
