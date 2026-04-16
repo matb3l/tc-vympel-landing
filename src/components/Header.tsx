@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useRef } from 'react'
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { Phone, Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -14,60 +14,72 @@ const NAV_ITEMS = [
 ]
 
 export function Header() {
-  const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { scrollY } = useScroll()
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  const bg = useTransform(scrollY, [0, 80], ['rgba(255,255,255,0)', 'rgba(255,255,255,0.95)'])
+  const blur = useTransform(scrollY, [0, 80], ['blur(0px)', 'blur(20px)'])
+  const borderOpacity = useTransform(scrollY, [0, 80], [0, 0.08])
+  const shadow = useTransform(scrollY, [0, 80], ['0 0 0 0 rgba(0,0,0,0)', '0 1px 12px 0 rgba(0,0,0,0.06)'])
+  const textColor = useTransform(scrollY, [0, 60], ['rgba(255,255,255,1)', 'rgba(15,23,42,1)'])
+  const textSubColor = useTransform(scrollY, [0, 60], ['rgba(255,255,255,0.5)', 'rgba(148,163,184,1)'])
+  const navColor = useTransform(scrollY, [0, 60], ['rgba(255,255,255,0.7)', 'rgba(100,116,139,1)'])
 
   return (
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-        scrolled ? 'bg-white/95 backdrop-blur-xl shadow-sm border-b border-dark-100/50' : 'bg-transparent',
-      )}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+      style={{
+        backgroundColor: bg,
+        backdropFilter: blur,
+        WebkitBackdropFilter: blur,
+        boxShadow: shadow,
+        borderBottom: useTransform(borderOpacity, (v) => `1px solid rgba(15,23,42,${v})`),
+      }}
+      className="fixed top-0 left-0 right-0 z-50"
     >
       <div className="container-fluid flex items-center justify-between" style={{ height: 'clamp(3.5rem, 6vw, 4.5rem)' }}>
         <a href="#" className="flex items-center gap-2.5 group">
           <div className="w-9 h-9 rounded-lg gradient-brand flex items-center justify-center text-white font-black text-base shadow-md shadow-brand-600/20">В</div>
           <div className="hidden sm:block">
-            <span className={cn('font-bold tracking-tight transition-colors', scrolled ? 'text-dark-900' : 'text-white')} style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>ТЦ ВЫМПЕЛ</span>
-            <span className={cn('block font-medium transition-colors', scrolled ? 'text-dark-400' : 'text-white/50')} style={{ fontSize: 'clamp(0.5625rem, 0.8vw, 0.6875rem)' }}>всё для мясопереработки</span>
+            <motion.span className="font-bold tracking-tight block" style={{ color: textColor, fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>ТЦ ВЫМПЕЛ</motion.span>
+            <motion.span className="block font-medium" style={{ color: textSubColor, fontSize: 'clamp(0.5625rem, 0.8vw, 0.6875rem)' }}>всё для мясопереработки</motion.span>
           </div>
         </a>
 
         <nav className="hidden lg:flex items-center gap-1">
           {NAV_ITEMS.map((item) => (
-            <a key={item.href} href={item.href} className={cn('px-3 py-2 rounded-lg text-fluid-sm font-medium transition-colors', scrolled ? 'text-dark-500 hover:text-dark-900 hover:bg-dark-50' : 'text-white/70 hover:text-white hover:bg-white/10')}>
+            <motion.a key={item.href} href={item.href} className="px-3 py-2 rounded-lg text-fluid-sm font-medium hover:bg-black/[0.04] transition-colors" style={{ color: navColor }}>
               {item.label}
-            </a>
+            </motion.a>
           ))}
         </nav>
 
         <div className="hidden lg:flex items-center gap-3">
-          <a href="tel:+74957870476" className={cn('flex items-center gap-2 text-fluid-sm font-bold transition-colors', scrolled ? 'text-dark-900' : 'text-white')}>
-            <div className={cn('w-8 h-8 rounded-lg flex items-center justify-center', scrolled ? 'bg-brand-50' : 'bg-white/10')}>
+          <motion.a href="tel:+74957870476" className="flex items-center gap-2 text-fluid-sm font-bold" style={{ color: textColor }}>
+            <div className="w-8 h-8 rounded-lg bg-brand-50/80 flex items-center justify-center">
               <Phone className="w-3.5 h-3.5 text-brand-600" />
             </div>
             8 495 787-04-76
-          </a>
+          </motion.a>
           <Button asChild size="sm"><a href="#contact">Заявка</a></Button>
         </div>
 
-        <button onClick={() => setMobileOpen(!mobileOpen)} className={cn('lg:hidden p-2 rounded-lg transition-colors', scrolled ? 'text-dark-900 hover:bg-dark-50' : 'text-white hover:bg-white/10')}>
+        <motion.button onClick={() => setMobileOpen(!mobileOpen)} className="lg:hidden p-2 rounded-lg" style={{ color: textColor }}>
           {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
+        </motion.button>
       </div>
 
       <AnimatePresence>
         {mobileOpen && (
-          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.25 }} className="lg:hidden bg-white border-t border-dark-100 overflow-hidden">
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25 }}
+            className="lg:hidden bg-white border-t border-dark-100 overflow-hidden"
+          >
             <div className="container-fluid py-4 space-y-1">
               {NAV_ITEMS.map((item) => (
                 <a key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-dark-700 font-medium rounded-lg hover:bg-dark-50 transition-colors">{item.label}</a>
