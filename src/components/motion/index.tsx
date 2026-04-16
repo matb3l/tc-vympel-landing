@@ -109,10 +109,13 @@ export function CountUp({
 }) {
   const ref = useRef<HTMLSpanElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-60px' })
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(target)
+  const [started, setStarted] = useState(false)
 
   useEffect(() => {
-    if (!isInView) return
+    if (!isInView || started) return
+    setStarted(true)
+    setCount(0)
     let start = 0
     const step = Math.ceil(target / (duration * 60))
     const timer = setInterval(() => {
@@ -125,7 +128,7 @@ export function CountUp({
       }
     }, 1000 / 60)
     return () => clearInterval(timer)
-  }, [isInView, target, duration])
+  }, [isInView, target, duration, started])
 
   return (
     <span ref={ref} className={className}>
