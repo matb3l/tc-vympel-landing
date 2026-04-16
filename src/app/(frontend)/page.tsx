@@ -4,68 +4,79 @@ import { ProductsSection } from '@/components/ProductsSection'
 import { ServicesSection } from '@/components/ServicesSection'
 import { PartnersSection } from '@/components/PartnersSection'
 import { GeographySection } from '@/components/GeographySection'
+import { CTASection } from '@/components/CTASection'
 import { ContactForm } from '@/components/ContactForm'
+import { StickyCard } from '@/components/StickyStack'
+
+import {
+  getHeroData,
+  getAboutData,
+  getProductsData,
+  getServicesData,
+  getPartnersData,
+  getSiteSettings,
+} from '@/lib/payload-data'
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
   name: 'ТЦ Вымпел',
-  description:
-    'Поставщик товаров для мясопереработки: оболочки, специи, пищевые добавки, белки и технологический инвентарь. С 1995 года.',
+  description: 'Поставщик товаров для мясопереработки с 1995 года.',
   url: 'https://tcvympel.ru',
-  logo: 'https://tcvympel.ru/logo.png',
   foundingDate: '1995',
-  address: [
-    {
-      '@type': 'PostalAddress',
-      streetAddress: 'Высоковольтный проезд, д. 13А',
-      addressLocality: 'Москва',
-      addressCountry: 'RU',
-      postalCode: '127566',
-    },
-    {
-      '@type': 'PostalAddress',
-      streetAddress: 'пр. Ленина, д. 27, корп. 1',
-      addressLocality: 'Нижний Новгород',
-      addressCountry: 'RU',
-      postalCode: '603140',
-    },
-    {
-      '@type': 'PostalAddress',
-      streetAddress: 'ул. Крупской, д. 55',
-      addressLocality: 'Санкт-Петербург',
-      addressCountry: 'RU',
-      postalCode: '192148',
-    },
-  ],
-  telephone: ['+7-495-787-04-76', '+7-495-660-87-90'],
+  telephone: ['+7-495-787-04-76'],
   email: 'tcvympel@mail.ru',
   sameAs: ['https://www.tcvympel.ru'],
   areaServed: { '@type': 'Country', name: 'Russia' },
-  makesOffer: [
-    { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Натуральные колбасные оболочки' } },
-    { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Искусственные колбасные оболочки' } },
-    { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Специи для мясопереработки' } },
-    { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Пищевые добавки' } },
-    { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Белки для мясопереработки' } },
-    { '@type': 'Offer', itemOffered: { '@type': 'Product', name: 'Технологический инвентарь' } },
-  ],
 }
 
-export default function HomePage() {
+const TOTAL_SECTIONS = 8
+
+export default async function HomePage() {
+  const [hero, about, products, services, partners, settings] = await Promise.all([
+    getHeroData(),
+    getAboutData(),
+    getProductsData(),
+    getServicesData(),
+    getPartnersData(),
+    getSiteSettings(),
+  ])
+
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <HeroSection />
-      <AboutSection />
-      <ProductsSection />
-      <ServicesSection />
-      <PartnersSection />
-      <GeographySection />
-      <ContactForm />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
+      <StickyCard index={0} total={TOTAL_SECTIONS}>
+        <HeroSection data={hero} phone={settings.phone} />
+      </StickyCard>
+
+      <StickyCard index={1} total={TOTAL_SECTIONS}>
+        <AboutSection data={about} />
+      </StickyCard>
+
+      <StickyCard index={2} total={TOTAL_SECTIONS}>
+        <ProductsSection data={products} />
+      </StickyCard>
+
+      <StickyCard index={3} total={TOTAL_SECTIONS}>
+        <ServicesSection data={services} />
+      </StickyCard>
+
+      <StickyCard index={4} total={TOTAL_SECTIONS}>
+        <PartnersSection data={partners} />
+      </StickyCard>
+
+      <StickyCard index={5} total={TOTAL_SECTIONS}>
+        <GeographySection />
+      </StickyCard>
+
+      <StickyCard index={6} total={TOTAL_SECTIONS}>
+        <CTASection />
+      </StickyCard>
+
+      <StickyCard index={7} total={TOTAL_SECTIONS}>
+        <ContactForm settings={settings} />
+      </StickyCard>
     </>
   )
 }

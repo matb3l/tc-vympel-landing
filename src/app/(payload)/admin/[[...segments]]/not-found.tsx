@@ -1,14 +1,16 @@
-import type { AdminViewProps } from 'payload'
-import { NotFoundPage } from '@payloadcms/next/views'
-import { importMap } from '../importMap'
+import type { Metadata } from 'next'
+import config from '@payload-config'
+import { NotFoundPage, generatePageMetadata } from '@payloadcms/next/views'
+import { importMap } from '../importMap.js'
 
 type Args = {
   params: Promise<{ segments: string[] }>
-  searchParams: Promise<{ [key: string]: string | string[] }>
+  searchParams: Promise<Record<string, string | string[]>>
 }
 
-const NotFound = async ({ params, searchParams }: Args) => {
-  return NotFoundPage({ params, searchParams, importMap } as AdminViewProps)
-}
+export const generateMetadata = ({ params, searchParams }: Args): Promise<Metadata> =>
+  generatePageMetadata({ config, params, searchParams })
 
-export default NotFound
+export default async function NotFound({ params, searchParams }: Args) {
+  return NotFoundPage({ config, importMap, params, searchParams })
+}

@@ -6,38 +6,50 @@
 
 @layer base {
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+  body {
+    overflow-x: hidden;
+    color: #0f172a;
   }
 }
 
 @layer components {
-  .section-padding {
-    @apply px-4 sm:px-6 lg:px-8 py-16 md:py-24;
+  /* Fluid container: 20px → 10vw padding, max 1280px */
+  .container-fluid {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: clamp(1.25rem, 5vw, 6rem);
+    padding-right: clamp(1.25rem, 5vw, 6rem);
   }
 
-  .container-narrow {
-    @apply max-w-7xl mx-auto;
+  /* Fluid section spacing */
+  .section-y {
+    padding-top: clamp(3rem, 8vw, 7rem);
+    padding-bottom: clamp(3rem, 8vw, 7rem);
   }
 
-  .gradient-brand {
-    @apply bg-gradient-to-br from-brand-600 via-brand-700 to-brand-900;
-  }
+  /* Fluid typography */
+  .text-fluid-hero { font-size: clamp(2.25rem, 6vw, 4.5rem); line-height: 1.08; }
+  .text-fluid-h2   { font-size: clamp(1.75rem, 4vw, 3rem);   line-height: 1.12; }
+  .text-fluid-h3   { font-size: clamp(1rem, 1.4vw, 1.25rem);  line-height: 1.4; }
+  .text-fluid-body  { font-size: clamp(0.9375rem, 1.1vw, 1.125rem); line-height: 1.7; }
+  .text-fluid-sm    { font-size: clamp(0.8125rem, 0.95vw, 0.9375rem); line-height: 1.6; }
 
-  .gradient-dark {
-    @apply bg-gradient-to-br from-dark-900 via-dark-950 to-black;
-  }
+  /* Fluid gap */
+  .gap-fluid     { gap: clamp(0.75rem, 2vw, 1.5rem); }
+  .gap-fluid-lg  { gap: clamp(1.5rem, 4vw, 3rem); }
 
-  .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-500 to-brand-700;
-  }
-
-  .glass {
-    @apply bg-white/80 backdrop-blur-xl border border-white/20;
-  }
-
-  .card-hover {
-    @apply transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl;
+  /* Gradients */
+  .gradient-brand { background: linear-gradient(135deg, #e11d48 0%, #be123c 50%, #881337 100%); }
+  .gradient-dark  { background: linear-gradient(180deg, #0f172a 0%, #020617 100%); }
+  .text-gradient  {
+    background: linear-gradient(90deg, #e11d48, #f43f5e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
   }
 }

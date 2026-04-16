@@ -1,116 +1,63 @@
-import { ArrowUpRight } from 'lucide-react'
+'use client'
+
+import { ArrowUpRight, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { Animate, Stagger, StaggerItem } from '@/components/motion'
+import { Animate, Stagger, StaggerItem, MagneticHover } from '@/components/motion'
 
-const PRODUCTS = [
-  {
-    title: 'Натуральная оболочка',
-    description: 'Черевы свиные, говяжьи, бараньи. Синюги, пузыри. Для колбас, сосисок и сарделек всех видов.',
-    imageAlt: 'Фото: натуральная колбасная оболочка',
-    gradient: 'from-amber-500/20 via-orange-400/10 to-yellow-500/20',
-    accent: 'bg-amber-500',
-  },
-  {
-    title: 'Искусственная оболочка',
-    description: 'Целлюлозные, полиамидные, коллагеновые, фиброузные. Широкий выбор калибров и цветов.',
-    imageAlt: 'Фото: искусственная колбасная оболочка',
-    gradient: 'from-blue-500/20 via-cyan-400/10 to-sky-500/20',
-    accent: 'bg-blue-500',
-  },
-  {
-    title: 'Специи и смеси',
-    description: 'Молотые и цельные специи, готовые функциональные смеси для всех видов мясных изделий.',
-    imageAlt: 'Фото: специи и смеси для мясопереработки',
-    gradient: 'from-red-500/20 via-rose-400/10 to-pink-500/20',
-    accent: 'bg-red-500',
-  },
-  {
-    title: 'Пищевые добавки',
-    description: 'Фосфаты, красители, стабилизаторы цвета, усилители вкуса, загустители и эмульгаторы.',
-    imageAlt: 'Фото: пищевые добавки для мясной продукции',
-    gradient: 'from-emerald-500/20 via-teal-400/10 to-green-500/20',
-    accent: 'bg-emerald-500',
-  },
-  {
-    title: 'Белки',
-    description: 'Соевые и животные белки для текстуры, увеличения выхода и оптимизации себестоимости.',
-    imageAlt: 'Фото: белковые добавки для мясопереработки',
-    gradient: 'from-violet-500/20 via-purple-400/10 to-fuchsia-500/20',
-    accent: 'bg-violet-500',
-  },
-  {
-    title: 'Сетки и шпагаты',
-    description: 'Эластичные и формовочные сетки, шпагаты для формовки и обвязки колбасных изделий.',
-    imageAlt: 'Фото: сетки и шпагаты для колбасного производства',
-    gradient: 'from-slate-400/20 via-gray-300/10 to-stone-400/20',
-    accent: 'bg-slate-500',
-  },
+const GRADIENTS = [
+  'from-amber-50 to-orange-50', 'from-blue-50 to-sky-50', 'from-red-50 to-rose-50',
+  'from-emerald-50 to-teal-50', 'from-violet-50 to-purple-50', 'from-slate-50 to-gray-100',
 ]
+const ACCENTS = ['bg-amber-500', 'bg-blue-500', 'bg-red-500', 'bg-emerald-500', 'bg-violet-500', 'bg-slate-500']
 
-export function ProductsSection() {
+type Product = { id: string; title: string; description: string; image?: any }
+type Props = { data: Product[] }
+
+export function ProductsSection({ data }: Props) {
   return (
-    <section id="products" className="section-padding bg-dark-50/50 relative">
-      <div className="container-narrow">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <Animate variant="fadeUp">
-            <Badge className="mb-6">Продукция</Badge>
-          </Animate>
-          <Animate variant="fadeUp" delay={0.1}>
-            <h2 className="text-4xl sm:text-5xl font-black text-dark-900 leading-tight mb-5">
-              Полный ассортимент для{' '}
-              <span className="text-gradient">вашего производства</span>
+    <section id="products" className="min-h-screen flex flex-col justify-center bg-[#f8fafc]" style={{ padding: 'clamp(3rem, 8vw, 7rem) 0' }}>
+      <div className="container-fluid">
+        <Animate>
+          <div className="text-center max-w-2xl mx-auto" style={{ marginBottom: 'clamp(2rem, 5vw, 3.5rem)' }}>
+            <span className="inline-block text-fluid-sm font-semibold text-brand-600 uppercase tracking-wider" style={{ marginBottom: 'clamp(0.5rem, 1vw, 0.75rem)' }}>Продукция</span>
+            <h2 className="text-fluid-h2 font-black text-dark-900 leading-tight" style={{ marginBottom: 'clamp(0.75rem, 2vw, 1rem)' }}>
+              Полный ассортимент для <span className="text-gradient">производства</span>
             </h2>
-          </Animate>
-          <Animate variant="fadeUp" delay={0.2}>
-            <p className="text-lg text-dark-400">
-              Всё, что нужно вашему предприятию — от оболочки до технологического инвентаря.
-              Постоянное наличие на складах в Москве.
+            <p className="text-fluid-body text-dark-500">
+              Всё необходимое для мясоперерабатывающего предприятия. Всегда на складе в Москве.
             </p>
-          </Animate>
-        </div>
+          </div>
+        </Animate>
 
-        <Stagger className="grid md:grid-cols-2 lg:grid-cols-3 gap-5" staggerDelay={0.08}>
-          {PRODUCTS.map((product) => (
-            <StaggerItem key={product.title}>
-              <div className="group relative bg-white rounded-[1.75rem] overflow-hidden border border-dark-100/80 hover:border-dark-200 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-dark-900/[0.06] transition-all duration-700">
-                {/* Image area */}
-                <div className={`relative aspect-[16/10] bg-gradient-to-br ${product.gradient} overflow-hidden`}>
-                  <div className="absolute inset-0 flex items-center justify-center opacity-60 group-hover:opacity-80 transition-opacity duration-700">
-                    <div className="text-center text-dark-400 p-4">
-                      <p className="text-sm font-medium">{product.imageAlt}</p>
-                      <p className="text-xs text-dark-300 mt-1">Добавьте фото через CMS</p>
-                    </div>
+        <Stagger className="grid sm:grid-cols-2 lg:grid-cols-3 gap-fluid" staggerDelay={0.08}>
+          {data.map((product, i) => (
+            <StaggerItem key={product.id}>
+              <div className="group bg-white overflow-hidden border border-dark-200/60 hover:border-dark-300 hover:shadow-xl hover:shadow-dark-900/[0.05] transition-all duration-500 h-full flex flex-col" style={{ borderRadius: 'clamp(0.75rem, 2vw, 1.25rem)' }}>
+                <div className={`relative bg-gradient-to-br ${GRADIENTS[i % GRADIENTS.length]}`} style={{ height: 'clamp(7rem, 12vw, 10rem)' }}>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <p className="text-xs font-medium text-dark-400">Фото товара</p>
                   </div>
-                  <div className={`absolute top-4 left-4 w-3 h-3 rounded-full ${product.accent} shadow-lg`} />
-                  <div className="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <div className={`absolute top-3 left-3 w-2.5 h-2.5 rounded-full ${ACCENTS[i % ACCENTS.length]}`} />
                 </div>
-
-                {/* Content */}
-                <div className="p-6">
-                  <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-lg font-bold text-dark-900 group-hover:text-brand-600 transition-colors duration-500">
-                      {product.title}
-                    </h3>
-                    <div className="w-8 h-8 rounded-lg bg-dark-50 group-hover:bg-brand-50 flex items-center justify-center transition-colors duration-500 flex-shrink-0 ml-3">
-                      <ArrowUpRight className="w-4 h-4 text-dark-300 group-hover:text-brand-600 transition-all duration-500" />
+                <div className="flex-1 flex flex-col" style={{ padding: 'clamp(1rem, 2vw, 1.25rem)' }}>
+                  <div className="flex items-start justify-between mb-2">
+                    <h3 className="text-fluid-h3 font-bold text-dark-900">{product.title}</h3>
+                    <div className="w-7 h-7 rounded-lg bg-dark-100 group-hover:bg-brand-50 flex items-center justify-center transition-all flex-shrink-0 ml-2">
+                      <ArrowUpRight className="w-3.5 h-3.5 text-dark-400 group-hover:text-brand-600 transition-colors" />
                     </div>
                   </div>
-                  <p className="text-dark-400 text-sm leading-relaxed">{product.description}</p>
+                  <p className="text-dark-500 text-fluid-sm flex-1">{product.description}</p>
                 </div>
               </div>
             </StaggerItem>
           ))}
         </Stagger>
 
-        <Animate variant="fadeUp" delay={0.4}>
-          <div className="text-center mt-14">
-            <Button asChild size="lg">
-              <a href="#contact">
-                Запросить каталог с ценами
-                <ArrowUpRight className="w-4 h-4" />
-              </a>
-            </Button>
+        <Animate>
+          <div className="text-center" style={{ marginTop: 'clamp(2rem, 4vw, 2.5rem)' }}>
+            <MagneticHover strength={0.1}>
+              <Button asChild size="lg"><a href="#contact">Запросить каталог с ценами <ArrowRight className="w-4 h-4" /></a></Button>
+            </MagneticHover>
           </div>
         </Animate>
       </div>
