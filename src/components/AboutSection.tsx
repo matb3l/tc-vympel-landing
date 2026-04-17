@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { Award, Users, Globe, Headset, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Animate, Stagger, StaggerItem } from '@/components/motion'
@@ -59,11 +60,13 @@ export function AboutSection({ data }: Props) {
             <Animate delay={0.1}>
               <div className="relative overflow-hidden group" style={{ borderRadius: 'clamp(1rem, 2.5vw, 1.75rem)', marginBottom: 'clamp(1rem, 2.5vw, 1.5rem)' }}>
                 <div className="aspect-[16/10] relative bg-gradient-to-br from-dark-200 to-dark-300">
-                  <img
+                  <Image
                     src={SITE_IMAGES.about.url}
                     alt={SITE_IMAGES.about.alt}
-                    loading="lazy"
-                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+                    fill
+                    sizes="(min-width: 1024px) 58vw, 100vw"
+                    quality={80}
+                    className="object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
 

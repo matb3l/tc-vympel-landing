@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { ArrowRight, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Animate, MagneticHover } from '@/components/motion'
@@ -16,14 +17,15 @@ export function CTASection({ data }: Props) {
 
   return (
     <section className="min-h-screen flex items-center relative overflow-hidden bg-charcoal grain" style={{ padding: 'clamp(4rem, 10vw, 8rem) 0' }}>
-      {/* Background: тёплый градиент + фото-бэкграунд */}
       <div className="absolute inset-0">
-        <img
+        <Image
           src={SITE_IMAGES.cta.url}
           alt=""
           aria-hidden
-          loading="lazy"
-          className="w-full h-full object-cover opacity-30"
+          fill
+          sizes="100vw"
+          quality={70}
+          className="object-cover opacity-30"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-[#7f1d1d]/80 via-[#0a0604]/90 to-[#0a0604]" />
       </div>

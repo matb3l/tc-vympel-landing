@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { ArrowUpRight, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Animate, Stagger, StaggerItem, MagneticHover } from '@/components/motion'
@@ -84,11 +85,13 @@ function ProductCard({ product, tall, wide }: { product: CardProduct; tall?: boo
       className="group relative block overflow-hidden bg-[#0a0604] h-full"
       style={{ borderRadius: 'clamp(0.75rem, 2vw, 1.25rem)', minHeight: tall ? 'clamp(20rem, 40vw, 34rem)' : wide ? 'clamp(10rem, 18vw, 14rem)' : 'clamp(14rem, 22vw, 18rem)' }}
     >
-      <img
+      <Image
         src={image.url}
         alt={image.alt}
-        loading="lazy"
-        className="absolute inset-0 w-full h-full object-cover opacity-80 transition-all duration-700 group-hover:scale-105 group-hover:opacity-95"
+        fill
+        sizes={tall ? '(min-width: 1024px) 50vw, 100vw' : '(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw'}
+        quality={75}
+        className="object-cover opacity-80 transition-all duration-700 group-hover:scale-105 group-hover:opacity-95"
       />
 
       {/* Dark gradient overlay */}

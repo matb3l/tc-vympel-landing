@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { ArrowRight, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Animate, MagneticHover } from '@/components/motion'
@@ -27,13 +28,15 @@ export function HeroSection({ data, phone }: Props) {
 
   return (
     <section className="relative min-h-[100svh] bg-charcoal grain overflow-hidden flex flex-col">
-      {/* Background image — full bleed с глубоким overlay */}
       <div className="absolute inset-0 z-0">
-        <img
+        <Image
           src={SITE_IMAGES.hero.url}
           alt={SITE_IMAGES.hero.alt}
-          fetchPriority="high"
-          className="absolute inset-0 w-full h-full object-cover opacity-60"
+          fill
+          priority
+          sizes="100vw"
+          quality={75}
+          className="object-cover opacity-60"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-[#0a0604] via-[#0a0604]/85 to-[#0a0604]/20" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0a0604] via-transparent to-transparent" />
