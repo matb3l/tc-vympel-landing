@@ -31,12 +31,6 @@ export const HeroSection: GlobalConfig = {
       defaultValue: 'Позвонить технологу',
     },
     {
-      name: 'backgroundImage',
-      type: 'upload',
-      relationTo: 'media',
-      label: 'Фоновое изображение (лучше — горизонтальное фото в тёмной гамме)',
-    },
-    {
       name: 'stats',
       type: 'array',
       label: 'Статистика (4 карточки)',

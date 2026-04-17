@@ -215,11 +215,6 @@ export interface Product {
   id: number;
   title: string;
   description: string;
-  /**
-   * Например: beef, flask-conical, palette, egg и т.д.
-   */
-  icon?: string | null;
-  image?: (number | null) | Media;
   features?:
     | {
         text?: string | null;
@@ -240,7 +235,6 @@ export interface Partner {
   name: string;
   country: string;
   description?: string | null;
-  logo?: (number | null) | Media;
   website?: string | null;
   order?: number | null;
   updatedAt: string;
@@ -254,8 +248,6 @@ export interface Service {
   id: number;
   title: string;
   description: string;
-  icon?: string | null;
-  image?: (number | null) | Media;
   order?: number | null;
   updatedAt: string;
   createdAt: string;
@@ -448,8 +440,6 @@ export interface MediaSelect<T extends boolean = true> {
 export interface ProductsSelect<T extends boolean = true> {
   title?: T;
   description?: T;
-  icon?: T;
-  image?: T;
   features?:
     | T
     | {
@@ -469,7 +459,6 @@ export interface PartnersSelect<T extends boolean = true> {
   name?: T;
   country?: T;
   description?: T;
-  logo?: T;
   website?: T;
   order?: T;
   updatedAt?: T;
@@ -482,8 +471,6 @@ export interface PartnersSelect<T extends boolean = true> {
 export interface ServicesSelect<T extends boolean = true> {
   title?: T;
   description?: T;
-  icon?: T;
-  image?: T;
   order?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -586,7 +573,6 @@ export interface HeroSection {
   subtitle?: string | null;
   ctaText?: string | null;
   ctaSecondaryText?: string | null;
-  backgroundImage?: (number | null) | Media;
   stats?:
     | {
         value?: string | null;
@@ -608,7 +594,6 @@ export interface AboutSection {
    */
   title?: string | null;
   description?: string | null;
-  image?: (number | null) | Media;
   advantages?:
     | {
         title?: string | null;
@@ -698,7 +683,6 @@ export interface HeroSectionSelect<T extends boolean = true> {
   subtitle?: T;
   ctaText?: T;
   ctaSecondaryText?: T;
-  backgroundImage?: T;
   stats?:
     | T
     | {
@@ -717,7 +701,6 @@ export interface HeroSectionSelect<T extends boolean = true> {
 export interface AboutSectionSelect<T extends boolean = true> {
   title?: T;
   description?: T;
-  image?: T;
   advantages?:
     | T
     | {

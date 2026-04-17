@@ -8,8 +8,6 @@ export const Services: CollectionConfig = {
   fields: [
     { name: 'title', type: 'text', label: 'Название', required: true },
     { name: 'description', type: 'textarea', label: 'Описание', required: true },
-    { name: 'icon', type: 'text', label: 'Иконка (Lucide icon name)' },
-    { name: 'image', type: 'upload', relationTo: 'media', label: 'Фото' },
     { name: 'order', type: 'number', label: 'Порядок', defaultValue: 0 },
   ],
 }

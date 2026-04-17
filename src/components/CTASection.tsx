@@ -3,6 +3,7 @@
 import { ArrowRight, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Animate, MagneticHover } from '@/components/motion'
+import { SITE_IMAGES } from '@/lib/images'
 
 type Props = {
   data: { title: string; subtitle: string; ctaText: string; benefits: string[] }
@@ -18,7 +19,7 @@ export function CTASection({ data }: Props) {
       {/* Background: тёплый градиент + фото-бэкграунд */}
       <div className="absolute inset-0">
         <img
-          src="https://images.unsplash.com/photo-1597417321971-45e034f7a993?w=2400&q=85&auto=format&fit=crop"
+          src={SITE_IMAGES.cta.url}
           alt=""
           aria-hidden
           loading="lazy"

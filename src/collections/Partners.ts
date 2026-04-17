@@ -9,7 +9,6 @@ export const Partners: CollectionConfig = {
     { name: 'name', type: 'text', label: 'Название компании', required: true },
     { name: 'country', type: 'text', label: 'Страна', required: true },
     { name: 'description', type: 'textarea', label: 'Описание' },
-    { name: 'logo', type: 'upload', relationTo: 'media', label: 'Логотип' },
     { name: 'website', type: 'text', label: 'Сайт' },
     { name: 'order', type: 'number', label: 'Порядок', defaultValue: 0 },
   ],

@@ -3,12 +3,16 @@
 import { ArrowUpRight, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Animate, Stagger, StaggerItem, MagneticHover } from '@/components/motion'
+import { getProductImage } from '@/lib/images'
 
-type Product = { id: string; title: string; description: string; image: { url: string; alt: string } | null }
+type Product = { id: string; title: string; description: string }
 type Props = { data: Product[] }
 
+type CardProduct = Product & { _index: number }
+
 export function ProductsSection({ data }: Props) {
-  const [feature, ...rest] = data
+  const indexed: CardProduct[] = data.map((p, i) => ({ ...p, _index: i }))
+  const [feature, ...rest] = indexed
 
   return (
     <section id="products" className="min-h-screen flex flex-col justify-center bg-bone" style={{ padding: 'clamp(4rem, 10vw, 8rem) 0' }}>
@@ -72,23 +76,20 @@ export function ProductsSection({ data }: Props) {
   )
 }
 
-function ProductCard({ product, tall, wide }: { product: Product; tall?: boolean; wide?: boolean }) {
+function ProductCard({ product, tall, wide }: { product: CardProduct; tall?: boolean; wide?: boolean }) {
+  const image = getProductImage(product._index)
   return (
     <a
       href="#contact"
       className="group relative block overflow-hidden bg-[#0a0604] h-full"
       style={{ borderRadius: 'clamp(0.75rem, 2vw, 1.25rem)', minHeight: tall ? 'clamp(20rem, 40vw, 34rem)' : wide ? 'clamp(10rem, 18vw, 14rem)' : 'clamp(14rem, 22vw, 18rem)' }}
     >
-      {product.image ? (
-        <img
-          src={product.image.url}
-          alt={product.image.alt}
-          loading="lazy"
-          className="absolute inset-0 w-full h-full object-cover opacity-80 transition-all duration-700 group-hover:scale-105 group-hover:opacity-95"
-        />
-      ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-dark-800 to-dark-900" />
-      )}
+      <img
+        src={image.url}
+        alt={image.alt}
+        loading="lazy"
+        className="absolute inset-0 w-full h-full object-cover opacity-80 transition-all duration-700 group-hover:scale-105 group-hover:opacity-95"
+      />
 
       {/* Dark gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/20" />

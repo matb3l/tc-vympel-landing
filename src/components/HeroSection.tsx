@@ -3,6 +3,7 @@
 import { ArrowRight, Phone } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Animate, MagneticHover } from '@/components/motion'
+import { SITE_IMAGES } from '@/lib/images'
 
 type Props = {
   data: {
@@ -11,7 +12,6 @@ type Props = {
     subtitle: string
     ctaText: string
     ctaSecondaryText: string
-    backgroundImage: { url: string; alt: string } | null
     stats: { value: string; label: string }[]
   }
   phone: string
@@ -29,19 +29,15 @@ export function HeroSection({ data, phone }: Props) {
     <section className="relative min-h-[100svh] bg-charcoal grain overflow-hidden flex flex-col">
       {/* Background image — full bleed с глубоким overlay */}
       <div className="absolute inset-0 z-0">
-        {data.backgroundImage && (
-          <>
-            <img
-              src={data.backgroundImage.url}
-              alt={data.backgroundImage.alt}
-              fetchPriority="high"
-              className="absolute inset-0 w-full h-full object-cover opacity-60"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#0a0604] via-[#0a0604]/85 to-[#0a0604]/20" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0604] via-transparent to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#0a0604]/60 via-transparent to-transparent" />
-          </>
-        )}
+        <img
+          src={SITE_IMAGES.hero.url}
+          alt={SITE_IMAGES.hero.alt}
+          fetchPriority="high"
+          className="absolute inset-0 w-full h-full object-cover opacity-60"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0604] via-[#0a0604]/85 to-[#0a0604]/20" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0604] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a0604]/60 via-transparent to-transparent" />
       </div>
 
       {/* Vertical tag — слева */}

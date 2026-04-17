@@ -11,8 +11,6 @@ export const Products: CollectionConfig = {
   fields: [
     { name: 'title', type: 'text', label: 'Название', required: true },
     { name: 'description', type: 'textarea', label: 'Описание', required: true },
-    { name: 'icon', type: 'text', label: 'Иконка (Lucide icon name)', admin: { description: 'Например: beef, flask-conical, palette, egg и т.д.' } },
-    { name: 'image', type: 'upload', relationTo: 'media', label: 'Фото' },
     { name: 'features', type: 'array', label: 'Особенности', fields: [{ name: 'text', type: 'text', label: 'Текст' }] },
     { name: 'order', type: 'number', label: 'Порядок', defaultValue: 0 },
     { name: 'isActive', type: 'checkbox', label: 'Активен', defaultValue: true },

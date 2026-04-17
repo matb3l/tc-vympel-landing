@@ -1,5 +1,10 @@
 import type { Payload } from 'payload'
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Загрузка текстовых данных из Payload CMS. Картинки живут отдельно в
+// src/lib/images.ts (не через CMS).
+// ─────────────────────────────────────────────────────────────────────────────
+
 let cachedClient: Payload | null = null
 let initFailed = false
 
@@ -17,39 +22,6 @@ async function getPayloadClient(): Promise<Payload | null> {
   }
 }
 
-function resolveImage(field: any, fallback?: { url: string; alt: string } | null): { url: string; alt: string } | null {
-  if (!field) return fallback ?? null
-  if (typeof field === 'object' && field.url) {
-    return { url: field.url, alt: field.alt || '' }
-  }
-  return fallback ?? null
-}
-
-// Верифицированные Unsplash фото — все ID проверены через search.
-// Тёмная цветовая гамма, кинематографичное освещение, мясная тематика.
-const IMG = {
-  // Hero — сырое мясо на стальном подносе, драматичный свет (Kyle Mackie)
-  hero: 'https://images.unsplash.com/photo-1606677661991-446cea8ee182?w=2400&q=90&auto=format&fit=crop',
-  // About — прилавок мясной лавки (tommao wang)
-  about: 'https://images.unsplash.com/photo-1625643269470-5d3e7b69fa34?w=1600&q=90&auto=format&fit=crop',
-  // CTA — драматичный мясной кадр
-  cta: 'https://images.unsplash.com/photo-1597417321971-45e034f7a993?w=2400&q=85&auto=format&fit=crop',
-  products: {
-    // Натуральная оболочка — мастер-мясник с деревянной ручкой (традиционный look)
-    natural: 'https://images.unsplash.com/photo-1601790189147-a6213f4feb9b?w=900&q=90&auto=format&fit=crop',
-    // Искусственная оболочка — готовые колбаски на стальном подносе
-    artificial: 'https://images.unsplash.com/photo-1624772398061-bbfa87ec6b5a?w=900&q=90&auto=format&fit=crop',
-    // Специи — тёмный кадр со специями
-    spices: 'https://images.unsplash.com/photo-1601379759871-f7cc12d04be4?w=900&q=90&auto=format&fit=crop',
-    // Пищевые добавки — пищевые компоненты на разделочной доске
-    additives: 'https://images.unsplash.com/photo-1553025934-296397db4010?w=900&q=90&auto=format&fit=crop',
-    // Белки — гриль-колбаски
-    proteins: 'https://images.unsplash.com/photo-1598401863352-3de5501f4890?w=900&q=90&auto=format&fit=crop',
-    // Инвентарь — мясо на бумаге с инструментами
-    inventory: 'https://images.unsplash.com/photo-1632154023554-c2975e9be348?w=900&q=90&auto=format&fit=crop',
-  },
-}
-
 // ──────────────────────── HERO ────────────────────────
 
 const HERO_MOCK = {
@@ -58,7 +30,6 @@ const HERO_MOCK = {
   subtitle: 'Оболочки, специи, фосфаты, белки — всё, что нужно для колбас, деликатесов и полуфабрикатов премиум-класса. Прямые поставки от Viscofan, Kalle, Van Hees, Kerry. Отгрузка со склада в Москве в день заказа.',
   ctaText: 'Получить прайс-лист',
   ctaSecondaryText: 'Позвонить технологу',
-  backgroundImage: { url: IMG.hero, alt: 'Мясоперерабатывающее производство' } as { url: string; alt: string } | null,
   stats: [
     { value: '30', label: 'лет на рынке' },
     { value: '500+', label: 'мясоперерабатывающих цехов' },
@@ -79,7 +50,6 @@ export async function getHeroData() {
       subtitle: data.subtitle || HERO_MOCK.subtitle,
       ctaText: data.ctaText || HERO_MOCK.ctaText,
       ctaSecondaryText: data.ctaSecondaryText || HERO_MOCK.ctaSecondaryText,
-      backgroundImage: resolveImage(data.backgroundImage, HERO_MOCK.backgroundImage),
       stats: data.stats?.length
         ? data.stats.map((s: any) => ({ value: s.value, label: s.label }))
         : HERO_MOCK.stats,
@@ -94,7 +64,6 @@ export async function getHeroData() {
 const ABOUT_MOCK = {
   title: 'Партнёр мясопереработчиков России',
   description: 'ТЦ ВЫМПЕЛ — это не просто поставщик. Мы работаем с теми, кто превращает мясо в искусство. Наши технологи знают, как сделать колбасу с идеальным откусом, сохранить сочность деликатеса, добиться стабильного цвета варёнки. От небольших крафтовых цехов до крупнейших комбинатов страны — нам доверяют 30 лет.',
-  image: { url: IMG.about, alt: 'Мясоперерабатывающий цех' } as { url: string; alt: string } | null,
   advantages: [
     { title: 'ГОСТ и ТР ТС', description: 'Вся продукция сертифицирована и соответствует требованиям ЕАЭС', icon: 'award' },
     { title: 'Персональный технолог', description: 'Разработаем рецептуру под ваш продукт — бесплатно', icon: 'users' },
@@ -112,7 +81,6 @@ export async function getAboutData() {
     return {
       title: data.title || ABOUT_MOCK.title,
       description: data.description || ABOUT_MOCK.description,
-      image: resolveImage(data.image, ABOUT_MOCK.image),
       advantages: data.advantages?.length
         ? data.advantages.map((a: any) => ({ title: a.title, description: a.description, icon: a.icon }))
         : ABOUT_MOCK.advantages,
@@ -125,42 +93,12 @@ export async function getAboutData() {
 // ──────────────────────── PRODUCTS ────────────────────────
 
 const PRODUCTS_MOCK = [
-  {
-    id: '1',
-    title: 'Натуральная оболочка',
-    description: 'Черевы свиные 38–46 мм, говяжьи круга и синюги, бараньи — премиум отбор из Польши и Беларуси. Идеальная проницаемость, равномерная толщина, работает на любом шприце.',
-    image: { url: IMG.products.natural, alt: 'Натуральная колбасная оболочка' } as { url: string; alt: string } | null,
-  },
-  {
-    id: '2',
-    title: 'Искусственная оболочка',
-    description: 'Целлюлоза, коллаген, фиброуз, полиамид — Kalle, Viscofan, ATLAS. Варёные, полукопчёные, сырокопчёные — под любую рецептуру и диаметр.',
-    image: { url: IMG.products.artificial, alt: 'Искусственная оболочка для колбас' },
-  },
-  {
-    id: '3',
-    title: 'Специи и смеси',
-    description: 'Монопряности и функциональные смеси Wiberg, Moguntia, Van Hees. Ручной помол, свежие партии — тот самый аромат, который узнают ваши покупатели.',
-    image: { url: IMG.products.spices, alt: 'Специи для мясопереработки' },
-  },
-  {
-    id: '4',
-    title: 'Пищевые добавки',
-    description: 'Фосфаты ICL, красители Kerry, нитритная соль, стабилизаторы, консерванты. То, что превращает мясное сырьё в стабильный продукт с предсказуемым вкусом.',
-    image: { url: IMG.products.additives, alt: 'Пищевые добавки' },
-  },
-  {
-    id: '5',
-    title: 'Белки',
-    description: 'Соевые изоляты, коллагеновые и плазменные белки. Выход +10–15%, лучший откус, сочность, которую клиенты чувствуют с первого кусочка.',
-    image: { url: IMG.products.proteins, alt: 'Пищевые белки' },
-  },
-  {
-    id: '6',
-    title: 'Инвентарь и сетки',
-    description: 'Формовочные сетки, шпагат, ножи, термометры, клипсаторы. Всё, что нужно цеху, — одним заказом с доставкой за 24 часа.',
-    image: { url: IMG.products.inventory, alt: 'Производственный инвентарь' },
-  },
+  { id: '1', title: 'Натуральная оболочка', description: 'Черевы свиные 38–46 мм, говяжьи круга и синюги, бараньи — премиум отбор из Польши и Беларуси. Идеальная проницаемость, равномерная толщина, работает на любом шприце.' },
+  { id: '2', title: 'Искусственная оболочка', description: 'Целлюлоза, коллаген, фиброуз, полиамид — Kalle, Viscofan, ATLAS. Варёные, полукопчёные, сырокопчёные — под любую рецептуру и диаметр.' },
+  { id: '3', title: 'Специи и смеси', description: 'Монопряности и функциональные смеси Wiberg, Moguntia, Van Hees. Ручной помол, свежие партии — тот самый аромат, который узнают ваши покупатели.' },
+  { id: '4', title: 'Пищевые добавки', description: 'Фосфаты ICL, красители Kerry, нитритная соль, стабилизаторы, консерванты. То, что превращает мясное сырьё в стабильный продукт с предсказуемым вкусом.' },
+  { id: '5', title: 'Белки', description: 'Соевые изоляты, коллагеновые и плазменные белки. Выход +10–15%, лучший откус, сочность, которую клиенты чувствуют с первого кусочка.' },
+  { id: '6', title: 'Инвентарь и сетки', description: 'Формовочные сетки, шпагат, ножи, термометры, клипсаторы. Всё, что нужно цеху, — одним заказом с доставкой за 24 часа.' },
 ]
 
 export async function getProductsData() {
@@ -169,12 +107,7 @@ export async function getProductsData() {
     if (!payload) return PRODUCTS_MOCK
     const { docs } = await payload.find({ collection: 'products', sort: 'order', where: { isActive: { equals: true } }, limit: 20 })
     if (!docs?.length) return PRODUCTS_MOCK
-    return docs.map((d: any, i: number) => ({
-      id: String(d.id),
-      title: d.title,
-      description: d.description,
-      image: resolveImage(d.image, PRODUCTS_MOCK[i % PRODUCTS_MOCK.length]?.image || null),
-    }))
+    return docs.map((d: any) => ({ id: String(d.id), title: d.title, description: d.description }))
   } catch {
     return PRODUCTS_MOCK
   }
@@ -214,12 +147,12 @@ const PARTNERS_MOCK = [
 export async function getPartnersData() {
   try {
     const payload = await getPayloadClient()
-    if (!payload) return PARTNERS_MOCK.map((name, i) => ({ id: String(i), name, logo: null as { url: string; alt: string } | null }))
+    if (!payload) return PARTNERS_MOCK.map((name, i) => ({ id: String(i), name }))
     const { docs } = await payload.find({ collection: 'partners', sort: 'order', limit: 50 })
-    if (!docs?.length) return PARTNERS_MOCK.map((name, i) => ({ id: String(i), name, logo: null }))
-    return docs.map((d: any) => ({ id: String(d.id), name: d.name, logo: resolveImage(d.logo) }))
+    if (!docs?.length) return PARTNERS_MOCK.map((name, i) => ({ id: String(i), name }))
+    return docs.map((d: any) => ({ id: String(d.id), name: d.name }))
   } catch {
-    return PARTNERS_MOCK.map((name, i) => ({ id: String(i), name, logo: null }))
+    return PARTNERS_MOCK.map((name, i) => ({ id: String(i), name }))
   }
 }
 

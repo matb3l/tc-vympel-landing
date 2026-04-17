@@ -3,6 +3,7 @@
 import { Award, Users, Globe, Headset, ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Animate, Stagger, StaggerItem } from '@/components/motion'
+import { SITE_IMAGES } from '@/lib/images'
 
 const ICON_MAP: Record<string, any> = { award: Award, users: Users, globe: Globe, headset: Headset }
 
@@ -10,7 +11,6 @@ type Props = {
   data: {
     title: string
     description: string
-    image: { url: string; alt: string } | null
     advantages: { title: string; description: string; icon: string }[]
   }
 }
@@ -59,21 +59,12 @@ export function AboutSection({ data }: Props) {
             <Animate delay={0.1}>
               <div className="relative overflow-hidden group" style={{ borderRadius: 'clamp(1rem, 2.5vw, 1.75rem)', marginBottom: 'clamp(1rem, 2.5vw, 1.5rem)' }}>
                 <div className="aspect-[16/10] relative bg-gradient-to-br from-dark-200 to-dark-300">
-                  {data.image ? (
-                    <img
-                      src={data.image.url}
-                      alt={data.image.alt}
-                      loading="lazy"
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-dark-400">
-                      <div className="text-center p-6">
-                        <Award className="w-12 h-12 mx-auto mb-3 text-dark-300" />
-                        <p className="font-semibold text-dark-500">Фото цеха</p>
-                      </div>
-                    </div>
-                  )}
+                  <img
+                    src={SITE_IMAGES.about.url}
+                    alt={SITE_IMAGES.about.alt}
+                    loading="lazy"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-[1.03]"
+                  />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
 
                   {/* Floating badge — editorial style */}
