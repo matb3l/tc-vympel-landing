@@ -4,14 +4,10 @@ import { useState } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
 import { Phone, Menu, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
+import { NAV, SETTINGS } from '@/lib/content'
 
-const NAV_ITEMS = [
-  { label: 'О компании', href: '#about' },
-  { label: 'Продукция', href: '#products' },
-  { label: 'Услуги', href: '#services' },
-  { label: 'Контакты', href: '#contact' },
-]
+const NAV_ITEMS = NAV
+const phoneHref = `tel:${SETTINGS.phone.replace(/\D/g, '')}`
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -58,11 +54,11 @@ export function Header() {
         </nav>
 
         <div className="hidden lg:flex items-center gap-3">
-          <motion.a href="tel:+74957870476" className="flex items-center gap-2 text-fluid-sm font-bold" style={{ color: textColor }}>
+          <motion.a href={phoneHref} className="flex items-center gap-2 text-fluid-sm font-bold" style={{ color: textColor }}>
             <div className="w-8 h-8 rounded-lg bg-brand-50/80 flex items-center justify-center">
               <Phone className="w-3.5 h-3.5 text-brand-600" />
             </div>
-            8 495 787-04-76
+            {SETTINGS.phone}
           </motion.a>
           <Button asChild size="sm"><a href="#contact">Заявка</a></Button>
         </div>
@@ -86,8 +82,8 @@ export function Header() {
                 <a key={item.href} href={item.href} onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 text-dark-700 font-medium rounded-lg hover:bg-dark-50 transition-colors">{item.label}</a>
               ))}
               <div className="pt-3 mt-3 border-t border-dark-100 space-y-3">
-                <a href="tel:+74957870476" className="flex items-center gap-2 px-3 py-2.5 text-dark-900 font-bold">
-                  <Phone className="w-4 h-4 text-brand-600" /> 8 495 787-04-76
+                <a href={phoneHref} className="flex items-center gap-2 px-3 py-2.5 text-dark-900 font-bold">
+                  <Phone className="w-4 h-4 text-brand-600" /> {SETTINGS.phone}
                 </a>
                 <Button asChild className="w-full" size="lg"><a href="#contact" onClick={() => setMobileOpen(false)}>Оставить заявку</a></Button>
               </div>

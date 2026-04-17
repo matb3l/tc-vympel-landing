@@ -7,6 +7,7 @@ import { z } from 'zod'
 import { Send, Phone, Mail, MapPin, Clock, CheckCircle2, Loader2, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Animate, MagneticHover } from '@/components/motion'
+import { SETTINGS } from '@/lib/content'
 
 const phoneRegex = /^\+7\s?\(\d{3}\)\s?\d{3}-\d{2}-\d{2}$/
 
@@ -30,11 +31,8 @@ function formatPhone(raw: string): string {
   return `+7 (${d.slice(1, 4)}) ${d.slice(4, 7)}-${d.slice(7, 9)}-${d.slice(9, 11)}`
 }
 
-type Props = {
-  settings: { phone: string; email: string; address: string }
-}
-
-export function ContactForm({ settings }: Props) {
+export function ContactForm() {
+  const settings = SETTINGS
   const [submitted, setSubmitted] = useState(false)
   const [serverError, setServerError] = useState('')
 
@@ -75,7 +73,7 @@ export function ContactForm({ settings }: Props) {
     { icon: Phone, label: 'Телефон', value: settings.phone, href: `tel:${settings.phone.replace(/\D/g, '')}` },
     { icon: Mail, label: 'Email', value: settings.email, href: `mailto:${settings.email}` },
     { icon: MapPin, label: 'Адрес', value: settings.address },
-    { icon: Clock, label: 'График', value: 'Пн–Пт: 9:00–18:00' },
+    { icon: Clock, label: 'График', value: settings.workingHours.weekdays },
   ]
 
   const inputBase = 'w-full rounded-xl bg-dark-50 border text-dark-900 placeholder:text-dark-400 outline-none transition-all duration-200 text-fluid-body'
@@ -205,14 +203,21 @@ export function ContactForm({ settings }: Props) {
                 </div>
               ))}
 
-              <div className="relative overflow-hidden aspect-video bg-dark-200 border border-dark-200/60" style={{ borderRadius: 'clamp(0.5rem, 1.5vw, 0.75rem)' }}>
+              <a
+                href={`https://yandex.ru/maps/?text=${encodeURIComponent(settings.address)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative overflow-hidden aspect-video bg-dark-100 border border-dark-200/60 hover:border-brand-300 transition-colors"
+                style={{ borderRadius: 'clamp(0.5rem, 1.5vw, 0.75rem)' }}
+              >
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center text-dark-500">
-                    <MapPin className="w-8 h-8 mx-auto mb-2 text-dark-400" />
-                    <p className="text-fluid-sm font-medium">Карта — подключите через CMS</p>
+                  <div className="text-center text-dark-500 group-hover:text-brand-600 transition-colors">
+                    <MapPin className="w-8 h-8 mx-auto mb-2" />
+                    <p className="text-fluid-sm font-semibold">Открыть на Яндекс.Картах</p>
+                    <p className="text-xs text-dark-400 mt-0.5">{settings.address}</p>
                   </div>
                 </div>
-              </div>
+              </a>
             </div>
           </Animate>
         </div>

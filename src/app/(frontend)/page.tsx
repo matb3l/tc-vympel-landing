@@ -1,5 +1,3 @@
-export const revalidate = 60
-
 import { HeroSection } from '@/components/HeroSection'
 import { AboutSection } from '@/components/AboutSection'
 import { ProductsSection } from '@/components/ProductsSection'
@@ -11,77 +9,59 @@ import { ContactForm } from '@/components/ContactForm'
 import { StickyCard } from '@/components/StickyStack'
 
 import {
-  getHeroData,
-  getAboutData,
-  getProductsData,
-  getServicesData,
-  getPartnersData,
-  getGeographyData,
-  getCTAData,
-  getSiteSettings,
-} from '@/lib/payload-data'
+  HERO, ABOUT, PRODUCTS, SERVICES, PARTNERS, GEOGRAPHY, CTA, SETTINGS,
+} from '@/lib/content'
 
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'ТЦ Вымпел',
+  name: SETTINGS.companyName,
   description: 'Поставщик товаров для мясопереработки с 1995 года.',
   url: 'https://tcvympel.ru',
   foundingDate: '1995',
   telephone: ['+7-495-787-04-76'],
-  email: 'tcvympel@mail.ru',
-  sameAs: ['https://www.tcvympel.ru'],
+  email: SETTINGS.email,
+  sameAs: [SETTINGS.externalSite],
   areaServed: { '@type': 'Country', name: 'Russia' },
 }
 
 const TOTAL_SECTIONS = 8
 
-export default async function HomePage() {
-  const [hero, about, products, services, partners, geography, cta, settings] = await Promise.all([
-    getHeroData(),
-    getAboutData(),
-    getProductsData(),
-    getServicesData(),
-    getPartnersData(),
-    getGeographyData(),
-    getCTAData(),
-    getSiteSettings(),
-  ])
-
+export default function HomePage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       <StickyCard index={0} total={TOTAL_SECTIONS}>
-        <HeroSection data={hero} phone={settings.phone} />
+        <HeroSection data={HERO} phone={SETTINGS.phone} />
       </StickyCard>
 
       <StickyCard index={1} total={TOTAL_SECTIONS}>
-        <AboutSection data={about} />
+        <AboutSection data={ABOUT} />
       </StickyCard>
 
       <StickyCard index={2} total={TOTAL_SECTIONS}>
-        <ProductsSection data={products} />
+        <ProductsSection data={PRODUCTS as any} />
       </StickyCard>
 
       <StickyCard index={3} total={TOTAL_SECTIONS}>
-        <ServicesSection data={services} />
+        <ServicesSection data={SERVICES as any} />
       </StickyCard>
 
       <StickyCard index={4} total={TOTAL_SECTIONS}>
-        <PartnersSection data={partners} />
+        <PartnersSection data={PARTNERS as any} />
       </StickyCard>
 
       <StickyCard index={5} total={TOTAL_SECTIONS}>
-        <GeographySection data={geography} />
+        <GeographySection data={GEOGRAPHY as any} />
       </StickyCard>
 
       <StickyCard index={6} total={TOTAL_SECTIONS}>
-        <CTASection data={cta} />
+        <CTASection data={CTA as any} />
       </StickyCard>
 
       <StickyCard index={7} total={TOTAL_SECTIONS}>
-        <ContactForm settings={settings} />
+        <ContactForm />
       </StickyCard>
     </>
   )
