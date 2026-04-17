@@ -42,9 +42,9 @@ export function Header() {
     >
       <div className="container-fluid flex items-center justify-between" style={{ height: 'clamp(3.5rem, 6vw, 4.5rem)' }}>
         <a href="#" className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded-lg gradient-brand flex items-center justify-center text-white font-black text-base shadow-md shadow-brand-600/20">В</div>
+          <div className="w-10 h-10 rounded-xl gradient-brand flex items-center justify-center text-white font-display font-black text-lg shadow-md shadow-brand-900/30">В</div>
           <div className="hidden sm:block">
-            <motion.span className="font-bold tracking-tight block" style={{ color: textColor, fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>ТЦ ВЫМПЕЛ</motion.span>
+            <motion.span className="font-display font-black tracking-tight block leading-none" style={{ color: textColor, fontSize: 'clamp(0.9375rem, 1.2vw, 1.0625rem)' }}>ТЦ ВЫМПЕЛ</motion.span>
             <motion.span className="block font-medium" style={{ color: textSubColor, fontSize: 'clamp(0.5625rem, 0.8vw, 0.6875rem)' }}>всё для мясопереработки</motion.span>
           </div>
         </a>

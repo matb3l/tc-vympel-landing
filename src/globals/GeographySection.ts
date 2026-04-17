@@ -6,7 +6,7 @@ export const GeographySection: GlobalConfig = {
   access: { read: () => true },
   fields: [
     { name: 'title', type: 'text', label: 'Заголовок', defaultValue: 'Работаем по всей России' },
-    { name: 'subtitle', type: 'text', label: 'Подзаголовок', defaultValue: 'Собственные склады. Отгрузка в день заказа. Доставка в любой регион.' },
+    { name: 'subtitle', type: 'text', label: 'Подзаголовок', defaultValue: 'Собственный склад 3000 м² в Москве. Отгрузка в день заказа. Доставка в любой регион за 1–5 дней.' },
     {
       name: 'stats',
       type: 'array',

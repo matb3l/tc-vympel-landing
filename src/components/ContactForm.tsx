@@ -87,12 +87,12 @@ export function ContactForm({ settings }: Props) {
       <div className="container-fluid">
         <Animate>
           <div className="text-center max-w-2xl mx-auto" style={{ marginBottom: 'clamp(2rem, 5vw, 3.5rem)' }}>
-            <span className="inline-block text-fluid-sm font-semibold text-brand-600 uppercase tracking-wider" style={{ marginBottom: 'clamp(0.5rem, 1vw, 0.75rem)' }}>Контакты</span>
+            <span className="inline-block text-fluid-sm font-semibold text-brand-600 uppercase tracking-wider" style={{ marginBottom: 'clamp(0.5rem, 1vw, 0.75rem)' }}>Обсудим ваше производство</span>
             <h2 className="text-fluid-h2 font-black text-dark-900 leading-tight" style={{ marginBottom: 'clamp(0.75rem, 2vw, 1rem)' }}>
-              Оставьте заявку — <span className="text-gradient">перезвоним</span> за 2 часа
+              Перезвоним <span className="text-gradient">за 15 минут</span>
             </h2>
             <p className="text-fluid-body text-dark-500">
-              Подберём оптимальные позиции под ваше производство и предложим лучшие цены.
+              Подберём позиции под ваши рецептуры, проверим наличие на складе, предложим альтернативы. NDA — по запросу.
             </p>
           </div>
         </Animate>

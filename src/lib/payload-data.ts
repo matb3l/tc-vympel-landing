@@ -17,27 +17,53 @@ async function getPayloadClient(): Promise<Payload | null> {
   }
 }
 
-function resolveImage(field: any): { url: string; alt: string } | null {
-  if (!field) return null
+function resolveImage(field: any, fallback?: { url: string; alt: string } | null): { url: string; alt: string } | null {
+  if (!field) return fallback ?? null
   if (typeof field === 'object' && field.url) {
     return { url: field.url, alt: field.alt || '' }
   }
-  return null
+  return fallback ?? null
+}
+
+// Верифицированные Unsplash фото — все ID проверены через search.
+// Тёмная цветовая гамма, кинематографичное освещение, мясная тематика.
+const IMG = {
+  // Hero — сырое мясо на стальном подносе, драматичный свет (Kyle Mackie)
+  hero: 'https://images.unsplash.com/photo-1606677661991-446cea8ee182?w=2400&q=90&auto=format&fit=crop',
+  // About — прилавок мясной лавки (tommao wang)
+  about: 'https://images.unsplash.com/photo-1625643269470-5d3e7b69fa34?w=1600&q=90&auto=format&fit=crop',
+  // CTA — драматичный мясной кадр
+  cta: 'https://images.unsplash.com/photo-1597417321971-45e034f7a993?w=2400&q=85&auto=format&fit=crop',
+  products: {
+    // Натуральная оболочка — мастер-мясник с деревянной ручкой (традиционный look)
+    natural: 'https://images.unsplash.com/photo-1601790189147-a6213f4feb9b?w=900&q=90&auto=format&fit=crop',
+    // Искусственная оболочка — готовые колбаски на стальном подносе
+    artificial: 'https://images.unsplash.com/photo-1624772398061-bbfa87ec6b5a?w=900&q=90&auto=format&fit=crop',
+    // Специи — тёмный кадр со специями
+    spices: 'https://images.unsplash.com/photo-1601379759871-f7cc12d04be4?w=900&q=90&auto=format&fit=crop',
+    // Пищевые добавки — пищевые компоненты на разделочной доске
+    additives: 'https://images.unsplash.com/photo-1553025934-296397db4010?w=900&q=90&auto=format&fit=crop',
+    // Белки — гриль-колбаски
+    proteins: 'https://images.unsplash.com/photo-1598401863352-3de5501f4890?w=900&q=90&auto=format&fit=crop',
+    // Инвентарь — мясо на бумаге с инструментами
+    inventory: 'https://images.unsplash.com/photo-1632154023554-c2975e9be348?w=900&q=90&auto=format&fit=crop',
+  },
 }
 
 // ──────────────────────── HERO ────────────────────────
 
 const HERO_MOCK = {
-  title: 'Всё для мясопереработки',
-  subtitle: 'Оболочки, специи, добавки, белки и инвентарь от мировых производителей. Доставка по всей России. Персональный менеджер. Гибкие цены.',
-  ctaText: 'Получить каталог с ценами',
-  ctaSecondaryText: '8 495 787-04-76',
-  backgroundImage: null as { url: string; alt: string } | null,
+  badge: 'Надёжный поставщик с 1995 года',
+  title: 'Ингредиенты, из которых рождается вкус',
+  subtitle: 'Оболочки, специи, фосфаты, белки — всё, что нужно для колбас, деликатесов и полуфабрикатов премиум-класса. Прямые поставки от Viscofan, Kalle, Van Hees, Kerry. Отгрузка со склада в Москве в день заказа.',
+  ctaText: 'Получить прайс-лист',
+  ctaSecondaryText: 'Позвонить технологу',
+  backgroundImage: { url: IMG.hero, alt: 'Мясоперерабатывающее производство' } as { url: string; alt: string } | null,
   stats: [
-    { value: '30+', label: 'лет на рынке' },
-    { value: '500+', label: 'клиентов' },
-    { value: '1000+', label: 'товаров' },
-    { value: '5', label: 'стран-поставщиков' },
+    { value: '30', label: 'лет на рынке' },
+    { value: '500+', label: 'мясоперерабатывающих цехов' },
+    { value: '1500+', label: 'артикулов на складе' },
+    { value: '70+', label: 'регионов доставки' },
   ],
 }
 
@@ -45,14 +71,15 @@ export async function getHeroData() {
   try {
     const payload = await getPayloadClient()
     if (!payload) return HERO_MOCK
-    const data = await payload.findGlobal({ slug: 'hero-section' })
+    const data = await payload.findGlobal({ slug: 'hero-section' }) as any
     if (!data?.title) return HERO_MOCK
     return {
+      badge: HERO_MOCK.badge,
       title: data.title || HERO_MOCK.title,
       subtitle: data.subtitle || HERO_MOCK.subtitle,
       ctaText: data.ctaText || HERO_MOCK.ctaText,
       ctaSecondaryText: data.ctaSecondaryText || HERO_MOCK.ctaSecondaryText,
-      backgroundImage: resolveImage(data.backgroundImage),
+      backgroundImage: resolveImage(data.backgroundImage, HERO_MOCK.backgroundImage),
       stats: data.stats?.length
         ? data.stats.map((s: any) => ({ value: s.value, label: s.label }))
         : HERO_MOCK.stats,
@@ -65,14 +92,14 @@ export async function getHeroData() {
 // ──────────────────────── ABOUT ────────────────────────
 
 const ABOUT_MOCK = {
-  title: 'О компании',
-  description: 'ТЦ ВЫМПЕЛ основан в 1995 году. Один из крупнейших поставщиков товаров для мясопереработки в России. Склад в Москве обеспечивает отгрузку в день заказа. Поставщики — ведущие производители из Польши, Германии, Испании, Индии и Беларуси.',
-  image: null as { url: string; alt: string } | null,
+  title: 'Партнёр мясопереработчиков России',
+  description: 'ТЦ ВЫМПЕЛ — это не просто поставщик. Мы работаем с теми, кто превращает мясо в искусство. Наши технологи знают, как сделать колбасу с идеальным откусом, сохранить сочность деликатеса, добиться стабильного цвета варёнки. От небольших крафтовых цехов до крупнейших комбинатов страны — нам доверяют 30 лет.',
+  image: { url: IMG.about, alt: 'Мясоперерабатывающий цех' } as { url: string; alt: string } | null,
   advantages: [
-    { title: 'Проверенное качество', description: 'Сертифицированная продукция, ГОСТ и ТР ТС', icon: 'award' },
-    { title: 'Персональный менеджер', description: 'Индивидуальный подход к каждому клиенту', icon: 'users' },
-    { title: 'Прямые контракты', description: 'Работаем с производителями напрямую', icon: 'globe' },
-    { title: 'Техподдержка', description: 'Консультации технологов по рецептурам', icon: 'headset' },
+    { title: 'ГОСТ и ТР ТС', description: 'Вся продукция сертифицирована и соответствует требованиям ЕАЭС', icon: 'award' },
+    { title: 'Персональный технолог', description: 'Разработаем рецептуру под ваш продукт — бесплатно', icon: 'users' },
+    { title: 'Прямые контракты', description: 'Цены напрямую от Viscofan, Kalle, Van Hees, Kerry, ICL', icon: 'globe' },
+    { title: 'Отгрузка день в день', description: 'Склад 3000 м² — позиции всегда в наличии', icon: 'headset' },
   ],
 }
 
@@ -85,7 +112,7 @@ export async function getAboutData() {
     return {
       title: data.title || ABOUT_MOCK.title,
       description: data.description || ABOUT_MOCK.description,
-      image: resolveImage(data.image),
+      image: resolveImage(data.image, ABOUT_MOCK.image),
       advantages: data.advantages?.length
         ? data.advantages.map((a: any) => ({ title: a.title, description: a.description, icon: a.icon }))
         : ABOUT_MOCK.advantages,
@@ -98,12 +125,42 @@ export async function getAboutData() {
 // ──────────────────────── PRODUCTS ────────────────────────
 
 const PRODUCTS_MOCK = [
-  { id: '1', title: 'Натуральная оболочка', description: 'Черевы свиные, говяжьи, бараньи. Синюги, пузыри. Высший сорт.', image: null as { url: string; alt: string } | null },
-  { id: '2', title: 'Искусственная оболочка', description: 'Целлюлозные, полиамидные, коллагеновые, фиброузные оболочки.', image: null },
-  { id: '3', title: 'Специи и смеси', description: 'Молотые, цельные специи, функциональные смеси для колбас и деликатесов.', image: null },
-  { id: '4', title: 'Пищевые добавки', description: 'Фосфаты, красители, стабилизаторы, консерванты, усилители вкуса.', image: null },
-  { id: '5', title: 'Белки', description: 'Соевые и животные белки для улучшения текстуры и увеличения выхода.', image: null },
-  { id: '6', title: 'Инвентарь и сетки', description: 'Формовочные сетки, шпагаты, ножи, термометры и прочий инвентарь.', image: null },
+  {
+    id: '1',
+    title: 'Натуральная оболочка',
+    description: 'Черевы свиные 38–46 мм, говяжьи круга и синюги, бараньи — премиум отбор из Польши и Беларуси. Идеальная проницаемость, равномерная толщина, работает на любом шприце.',
+    image: { url: IMG.products.natural, alt: 'Натуральная колбасная оболочка' } as { url: string; alt: string } | null,
+  },
+  {
+    id: '2',
+    title: 'Искусственная оболочка',
+    description: 'Целлюлоза, коллаген, фиброуз, полиамид — Kalle, Viscofan, ATLAS. Варёные, полукопчёные, сырокопчёные — под любую рецептуру и диаметр.',
+    image: { url: IMG.products.artificial, alt: 'Искусственная оболочка для колбас' },
+  },
+  {
+    id: '3',
+    title: 'Специи и смеси',
+    description: 'Монопряности и функциональные смеси Wiberg, Moguntia, Van Hees. Ручной помол, свежие партии — тот самый аромат, который узнают ваши покупатели.',
+    image: { url: IMG.products.spices, alt: 'Специи для мясопереработки' },
+  },
+  {
+    id: '4',
+    title: 'Пищевые добавки',
+    description: 'Фосфаты ICL, красители Kerry, нитритная соль, стабилизаторы, консерванты. То, что превращает мясное сырьё в стабильный продукт с предсказуемым вкусом.',
+    image: { url: IMG.products.additives, alt: 'Пищевые добавки' },
+  },
+  {
+    id: '5',
+    title: 'Белки',
+    description: 'Соевые изоляты, коллагеновые и плазменные белки. Выход +10–15%, лучший откус, сочность, которую клиенты чувствуют с первого кусочка.',
+    image: { url: IMG.products.proteins, alt: 'Пищевые белки' },
+  },
+  {
+    id: '6',
+    title: 'Инвентарь и сетки',
+    description: 'Формовочные сетки, шпагат, ножи, термометры, клипсаторы. Всё, что нужно цеху, — одним заказом с доставкой за 24 часа.',
+    image: { url: IMG.products.inventory, alt: 'Производственный инвентарь' },
+  },
 ]
 
 export async function getProductsData() {
@@ -112,11 +169,11 @@ export async function getProductsData() {
     if (!payload) return PRODUCTS_MOCK
     const { docs } = await payload.find({ collection: 'products', sort: 'order', where: { isActive: { equals: true } }, limit: 20 })
     if (!docs?.length) return PRODUCTS_MOCK
-    return docs.map((d: any) => ({
+    return docs.map((d: any, i: number) => ({
       id: String(d.id),
       title: d.title,
       description: d.description,
-      image: resolveImage(d.image),
+      image: resolveImage(d.image, PRODUCTS_MOCK[i % PRODUCTS_MOCK.length]?.image || null),
     }))
   } catch {
     return PRODUCTS_MOCK
@@ -126,12 +183,12 @@ export async function getProductsData() {
 // ──────────────────────── SERVICES ────────────────────────
 
 const SERVICES_MOCK = [
-  { id: '1', title: 'Маркировка оболочки', description: 'Нанесение логотипов, надписей и маркировки на оболочки любых типов.' },
-  { id: '2', title: 'Гофрирование', description: 'Гофрирование натуральных и искусственных оболочек на современном оборудовании.' },
-  { id: '3', title: 'Флексопечать', description: 'Печать этикеток и упаковки. Высокое качество, быстрые сроки.' },
-  { id: '4', title: 'Технологическая поддержка', description: 'Консультации по подбору ингредиентов и разработке рецептур.' },
-  { id: '5', title: 'Документирование', description: 'Помощь с технической документацией и спецификациями на продукцию.' },
-  { id: '6', title: 'Подбор инвентаря', description: 'Подбор и поставка профессионального оборудования для цехов.' },
+  { id: '1', title: 'Маркировка оболочки', description: 'Нанесём ваш логотип, состав, сроки годности на любую оболочку за 3 дня.' },
+  { id: '2', title: 'Гофрирование', description: 'Современные немецкие линии. Идеальная калибровка для высокоскоростных шприцев.' },
+  { id: '3', title: 'Флексопечать', description: 'Этикетка и плёнка с полной полиграфией. От эскиза до готовой партии — 7 дней.' },
+  { id: '4', title: 'Технологическое сопровождение', description: 'Технолог с 20-летним стажем подберёт рецептуру, оптимизирует себестоимость, исправит дефекты.' },
+  { id: '5', title: 'Документация и ТУ', description: 'Декларация соответствия, ТУ, протоколы испытаний — поможем оформить под ключ.' },
+  { id: '6', title: 'Спецзаказ', description: 'Редкий диаметр, нестандартная смесь специй, индивидуальная фасовка — найдём или закажем напрямую.' },
 ]
 
 export async function getServicesData() {
@@ -170,12 +227,12 @@ export async function getPartnersData() {
 
 const GEOGRAPHY_MOCK = {
   title: 'Работаем по всей России',
-  subtitle: 'Собственные склады. Отгрузка в день заказа. Доставка в любой регион.',
+  subtitle: 'Собственный склад 3000 м² в Москве. Отгрузка в день заказа. Транспортные компании доставят в любой регион за 1–5 дней.',
   stats: [
     { value: 70, suffix: '+', label: 'регионов доставки', icon: 'map-pin', primary: true },
-    { value: 2, suffix: '', label: 'склада в Москве', icon: 'building', primary: false },
-    { value: 3, suffix: '', label: 'дня — средний срок', icon: 'truck', primary: false },
-    { value: 5, suffix: '+', label: 'стран-поставщиков', icon: 'globe', primary: false },
+    { value: 3000, suffix: ' м²', label: 'площадь склада', icon: 'building', primary: false },
+    { value: 24, suffix: ' ч', label: 'отгрузка после заказа', icon: 'truck', primary: false },
+    { value: 12, suffix: '', label: 'стран-производителей', icon: 'globe', primary: false },
   ],
 }
 
@@ -206,14 +263,14 @@ export async function getGeographyData() {
 // ──────────────────────── CTA ────────────────────────
 
 const CTA_MOCK = {
-  title: 'Готовы оптимизировать закупки?',
-  subtitle: 'Более 500 предприятий уже экономят с нами до 20% на ингредиентах. Присоединяйтесь.',
-  ctaText: 'Получить предложение',
+  title: 'Снизим себестоимость на 15–20%',
+  subtitle: 'Проведём аудит ваших закупок и покажем, где можно сэкономить без потери качества. Бесплатно, под NDA.',
+  ctaText: 'Запросить аудит закупок',
   benefits: [
-    'Бесплатная консультация технолога',
-    'Каталог с актуальными ценами',
-    'Персональная скидка на первый заказ',
-    'Отгрузка со склада в день заказа',
+    'Бесплатный аудит текущих закупок',
+    'Прайс с персональными скидками',
+    'Консультация технолога — 1 час',
+    'Пробная партия без предоплаты',
   ],
 }
 

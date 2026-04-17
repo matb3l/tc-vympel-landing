@@ -15,9 +15,12 @@ export function Footer() {
       <div className="container-fluid">
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-fluid-lg" style={{ paddingBottom: 'clamp(1.5rem, 4vw, 2.5rem)', borderBottom: '1px solid rgba(255,255,255,0.08)' }}>
           <div className="sm:col-span-2">
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-9 h-9 rounded-lg gradient-brand flex items-center justify-center text-white font-black text-base">В</div>
-              <span className="font-bold text-white tracking-tight" style={{ fontSize: 'clamp(0.875rem, 1.2vw, 1rem)' }}>ТЦ Вымпел</span>
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-11 h-11 rounded-xl gradient-brand flex items-center justify-center text-white font-display font-black shadow-lg shadow-brand-900/40" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.25rem)' }}>В</div>
+              <div>
+                <div className="font-display font-black text-white leading-none" style={{ fontSize: 'clamp(1rem, 1.3vw, 1.125rem)' }}>ТЦ Вымпел</div>
+                <div className="text-fluid-xs text-white/40 uppercase tracking-wider mt-0.5">С 1995 года</div>
+              </div>
             </div>
             <p className="text-white/60 text-fluid-sm max-w-sm leading-relaxed mb-5">
               Комплексное снабжение мясоперерабатывающих предприятий. Оболочки, специи, добавки, оборудование.

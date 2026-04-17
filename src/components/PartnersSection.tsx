@@ -1,36 +1,69 @@
 'use client'
 
-import { Animate, Stagger, StaggerItem } from '@/components/motion'
+import { Animate } from '@/components/motion'
 
 type Partner = { id: string; name: string; logo?: any }
 type Props = { data: Partner[] }
 
 export function PartnersSection({ data }: Props) {
+  // Делим на 2 ряда для двойного marquee
+  const mid = Math.ceil(data.length / 2)
+  const row1 = data.slice(0, mid)
+  const row2 = data.slice(mid)
+
   return (
-    <section className="min-h-screen flex items-center bg-white" style={{ padding: 'clamp(3rem, 8vw, 7rem) 0' }}>
+    <section className="min-h-screen flex flex-col justify-center bg-white overflow-hidden" style={{ padding: 'clamp(4rem, 10vw, 8rem) 0' }}>
       <div className="container-fluid w-full">
         <Animate>
-          <div className="text-center max-w-2xl mx-auto" style={{ marginBottom: 'clamp(2rem, 4vw, 3rem)' }}>
-            <span className="inline-block text-fluid-sm font-semibold text-brand-600 uppercase tracking-wider" style={{ marginBottom: 'clamp(0.5rem, 1vw, 0.75rem)' }}>Партнёры</span>
-            <h2 className="text-fluid-h2 font-black text-dark-900 leading-tight" style={{ marginBottom: 'clamp(0.75rem, 2vw, 1rem)' }}>
-              Мировые <span className="text-gradient">производители</span>
+          <div className="max-w-3xl" style={{ marginBottom: 'clamp(3rem, 6vw, 5rem)' }}>
+            <div className="flex items-center gap-3 text-fluid-xs font-semibold text-brand-700 uppercase tracking-[0.2em]" style={{ marginBottom: 'clamp(1rem, 2vw, 1.5rem)' }}>
+              <span className="w-8 h-px bg-brand-600" />
+              Партнёры и бренды
+            </div>
+            <h2 className="font-display font-black text-dark-900 leading-[0.95]" style={{ fontSize: 'clamp(2.25rem, 5.5vw, 4.5rem)', letterSpacing: '-0.03em', marginBottom: 'clamp(1rem, 2.5vw, 1.5rem)' }}>
+              Прямые контракты с{' '}
+              <span className="italic font-normal text-gradient">мировыми брендами</span>
             </h2>
-            <p className="text-fluid-body text-dark-500">Прямые контракты — лучшие цены и стабильные поставки.</p>
+            <p className="text-fluid-body text-dark-500 max-w-xl">
+              Никаких посредников — цены и наличие напрямую от производителей. Стабильные поставки даже в кризис.
+            </p>
           </div>
         </Animate>
+      </div>
 
-        <Stagger className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-fluid" staggerDelay={0.04}>
-          {data.map((partner) => (
-            <StaggerItem key={partner.id}>
-              <div className="group flex items-center justify-center rounded-xl bg-dark-50 hover:bg-white hover:shadow-md hover:shadow-dark-900/[0.04] border border-transparent hover:border-dark-200 transition-all" style={{ height: 'clamp(3.5rem, 6vw, 5rem)' }}>
-                <span className="text-fluid-sm font-semibold text-dark-400 group-hover:text-dark-700 tracking-wide transition-colors">
-                  {partner.name}
-                </span>
-              </div>
-            </StaggerItem>
-          ))}
-        </Stagger>
+      {/* Double marquee — во всю ширину viewport */}
+      <div className="relative space-y-4 -mx-[clamp(1.25rem,5vw,6rem)]">
+        {/* Верхний ряд */}
+        <MarqueeRow partners={row1.length ? row1 : data} />
+        {/* Нижний ряд — реверс */}
+        <MarqueeRow partners={row2.length ? row2 : data} reverse />
+
+        {/* Fade edges */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-32 bg-gradient-to-r from-white to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-32 bg-gradient-to-l from-white to-transparent z-10" />
       </div>
     </section>
+  )
+}
+
+function MarqueeRow({ partners, reverse }: { partners: Partner[]; reverse?: boolean }) {
+  // Дублируем для бесшовного зацикливания
+  const doubled = [...partners, ...partners, ...partners, ...partners]
+  return (
+    <div className="overflow-hidden">
+      <div className={`flex gap-4 ${reverse ? 'marquee-reverse' : 'marquee'} whitespace-nowrap`}>
+        {doubled.map((partner, i) => (
+          <div
+            key={`${partner.id}-${i}`}
+            className="flex-shrink-0 flex items-center justify-center px-10 bg-dark-50 border border-dark-100 hover:border-brand-300 hover:bg-brand-50/50 transition-all duration-500 group"
+            style={{ height: 'clamp(4rem, 7vw, 5.5rem)', minWidth: 'clamp(12rem, 18vw, 16rem)', borderRadius: 'clamp(0.75rem, 1.25vw, 1rem)' }}
+          >
+            <span className="font-display text-dark-600 group-hover:text-brand-700 tracking-tight transition-colors" style={{ fontSize: 'clamp(1rem, 1.5vw, 1.375rem)' }}>
+              {partner.name}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }

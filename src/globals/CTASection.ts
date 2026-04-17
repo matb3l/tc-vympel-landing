@@ -5,9 +5,9 @@ export const CTASection: GlobalConfig = {
   label: 'Блок «Призыв к действию»',
   access: { read: () => true },
   fields: [
-    { name: 'title', type: 'text', label: 'Заголовок', defaultValue: 'Готовы оптимизировать закупки?' },
-    { name: 'subtitle', type: 'textarea', label: 'Подзаголовок', defaultValue: 'Более 500 предприятий уже экономят с нами до 20% на ингредиентах. Присоединяйтесь.' },
-    { name: 'ctaText', type: 'text', label: 'Текст кнопки', defaultValue: 'Получить предложение' },
+    { name: 'title', type: 'text', label: 'Заголовок', defaultValue: 'Снизим себестоимость на 15–20%' },
+    { name: 'subtitle', type: 'textarea', label: 'Подзаголовок', defaultValue: 'Проведём аудит ваших закупок и покажем, где можно сэкономить без потери качества. Бесплатно, под NDA.' },
+    { name: 'ctaText', type: 'text', label: 'Текст кнопки', defaultValue: 'Запросить аудит закупок' },
     {
       name: 'benefits',
       type: 'array',

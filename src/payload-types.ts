@@ -579,6 +579,9 @@ export interface SiteSetting {
  */
 export interface HeroSection {
   id: number;
+  /**
+   * Последние 2 слова выделяются красным градиентом
+   */
   title?: string | null;
   subtitle?: string | null;
   ctaText?: string | null;
@@ -600,6 +603,9 @@ export interface HeroSection {
  */
 export interface AboutSection {
   id: number;
+  /**
+   * Последние 2 слова выделяются красным градиентом
+   */
   title?: string | null;
   description?: string | null;
   image?: (number | null) | Media;
@@ -607,7 +613,7 @@ export interface AboutSection {
     | {
         title?: string | null;
         description?: string | null;
-        icon?: string | null;
+        icon?: ('award' | 'users' | 'globe' | 'headset') | null;
         id?: string | null;
       }[]
     | null;
